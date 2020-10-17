@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_ricarica" android:title="@string/ricarica"
+        android:orderInCategory="200" app:showAsAction="never"/>
+    <item android:id="@+id/action_voti" android:title="@string/action_voti"
+        android:orderInCategory="200" app:showAsAction="never"/>
+    <item android:id="@+id/action_logout" android:title="@string/logout"
+        android:orderInCategory="200" app:showAsAction="never"/>
+    <item android:id="@+id/action_refresh"
+        android:icon="@drawable/refr" android:title="@string/action_refresh_title"
+        app:showAsAction="ifRoom" android:visible="false"/>
+    <item android:id="@+id/action_class"
+        android:icon="@drawable/menu_classifica" android:title="@string/action_class_title"
+        app:showAsAction="ifRoom" android:visible="false">
+        <menu/>
+    </item>
+
+</menu>

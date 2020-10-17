@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="100">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:id="@+id/Calciatore"
+        android:layout_weight="36"
+        android:gravity="start"
+        android:textColor="#444444"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="8"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Pg"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center"
+        android:textColor="#1274AF"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Mv"
+        android:layout_weight="12"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Mf"
+        android:layout_weight="12"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/G"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Ass"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Amm"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Esp"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="8dp"/>
+
+</LinearLayout>

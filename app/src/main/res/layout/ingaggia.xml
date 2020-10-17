@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radio"
+        android:orientation="vertical">
+
+        <RadioButton android:id="@+id/quot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quot"/>
+        <RadioButton android:id="@+id/scelta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scegli"
+            android:layout_marginTop="5dp"/>
+    </RadioGroup>
+
+    <EditText
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/prezzo"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/assegna"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/conferma"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

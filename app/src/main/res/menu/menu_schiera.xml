@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_info" android:title="@string/info"
+        android:orderInCategory="300" app:showAsAction="never"
+        android:textColor="#FFFFFF">
+    </item>
+    <item android:id="@+id/action_moduli" android:title="@string/modulo"
+        android:orderInCategory="100" app:showAsAction="ifRoom"
+        android:textColor="#FFFFFF" android:visible="false">
+        <menu/>
+    </item>
+    <item android:id="@+id/action_prob" android:title="@string/probform"
+        app:showAsAction="never" android:orderInCategory="400"/>
+    <item android:id="@+id/action_camp" android:title="@string/campioncini"
+        app:showAsAction="never" android:orderInCategory="400"/>
+</menu>

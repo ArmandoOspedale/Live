@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="100">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:textSize="16sp"
+        android:id="@+id/Posizione"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginLeft="8dp"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:id="@+id/icona"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="29"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/NomeSquadra"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="#444444"
+        android:layout_marginLeft="8dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Giocate"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Punti"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Vinte"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Pareggi"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Perse"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Golfatti"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:id="@+id/Golsubiti"
+        android:layout_weight="8"
+        android:gravity="center"
+        android:textColor="#1274AF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"/>
+
+</LinearLayout>

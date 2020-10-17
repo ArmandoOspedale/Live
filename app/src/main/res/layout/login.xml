@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dip"
+    android:layout_marginLeft="15dip"
+    android:layout_marginRight="15dip"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_un"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#333333"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dip"
+        android:text="@string/log_lega"/>
+
+    <EditText
+        android:inputType="text"
+        android:id="@+id/et_un"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:minWidth="200dp"
+        android:hint="@string/log_lega"/>
+
+    <TextView
+        android:id="@+id/tv_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#333333"
+        android:text="@string/log_squadra"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dip"/>
+
+    <EditText
+        android:inputType="textPassword"
+        android:id="@+id/et_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:minWidth="200dp"
+        android:hint="@string/log_squadra"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/log"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:background="#01Aef0"
+        android:textStyle="bold"
+        android:textSize="26sp"/>
+
+</LinearLayout>

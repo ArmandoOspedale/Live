@@ -1,0 +1,147 @@
+<resources>
+    <string name="app_name">FANTALIVE</string>
+
+    <string name="SenderID">65432441248</string>
+
+    <string name="action_settings">Cambia lega</string>
+    <string name="action_cal">Calendario</string>
+    <string name="action_refresh_title">Aggiorna</string>
+    <string name="action_class">CLASSIFICA</string>
+    <string name="action_class_g">CLASSIFICA DI GIORNATA</string>
+    <string name="action_class_title">Classifica</string>
+    <string name="header">PANCHINA</string>
+    <string name="intcal">CALENDARIO</string>
+    <string name="intform">FORMAZIONI</string>
+    <string name="ult_giorn">ULTIMA GIORNATA</string>
+    <string name="pross_giorn">PROSSIMA GIORNATA</string>
+    <string name="ins_form">INSERISCI FORMAZIONE</string>
+    <string name="log_lega">Username</string>
+    <string name="log_squadra">Password</string>
+    <string name="log">Login</string>
+    <string name="calcola">CALCOLA GIORNATA</string>
+    <string name="annulla">ANNULLA CALCOLO</string>
+    <string name="perc_tit">PERC. TITOLARITA\'</string>
+    <string name="info">Info</string>
+    <string name="sel_modulo">Seleziona modulo:</string>
+    <string name="conf_formazione">SCHIERA</string>
+    <string name="inv">Rendi formazione invisibile</string>
+    <string name="pertutte">Salva per tutte le competizioni</string>
+    <string name="conferma">CONFERMA</string>
+    <string name="logout">Logout</string>
+    <string name="squadra">SQUADRA</string>
+    <string name="pt">Pt</string>
+    <string name="totale">Totale</string>
+    <string name="punteggio">Punti</string>
+    <string name="giocate">G</string>
+    <string name="vittorie">V</string>
+    <string name="pareggi">N</string>
+    <string name="sconfitte">S</string>
+    <string name="golfatti">Gf</string>
+    <string name="golsubiti">Gs</string>
+    <string name="action_comp">Cambia competizione</string>
+    <string name="action_voti">Live FG</string>
+    <string name="intcalcolo">CALCOLA</string>
+    <string name="probform">Probabili formazioni</string>
+    <string name="modulo">Seleziona modulo</string>
+    <string name="campioncini">Aggiorna campioncini</string>
+    <string name="action_quot">Per Quotazione</string>
+    <string name="action_squadra">Per Squadra</string>
+    <string name="action_nome">Per Nome</string>
+    <string name="action_ordina">Ordina</string>
+    <string name="giorni">g</string>
+    <string name="ore">o</string>
+    <string name="minuti">m</string>
+    <string name="secondi">s</string>
+    <string name="action_disattiva">Disattivate</string>
+    <string name="tutti">Tutti i gol</string>
+    <string name="miasquadra">Solo per la mia squadra</string>
+    <string name="miapartita">Solo per la mia partita</string>
+    <string name="stats">Statistiche</string>
+    <string name="seiufficio">6 D\'UFFICIO</string>
+    <string name="si_no">SÌ/NO</string>
+    <string name="punti_prob">Pp</string>
+    <string name="diff">Diff</string>
+    <string name="intero">Prezzo intero</string>
+    <string name="meta">Metà prezzo</string>
+    <string name="zero">Zero</string>
+    <string name="scegli">Inserisci valore</string>
+    <string name="svincola">SVINCOLA</string>
+    <string name="quot">Quotazione</string>
+    <string name="assegna">ASSEGNA</string>
+    <string name="timer">PER INSERIRE LA FORMAZIONE MANCANO:</string>
+    <string name="nocomp">NESSUNA COMPETIZIONE ATTIVA</string>
+    <string name="zerozero">00</string>
+    <string name="ricarica">Ricarica info lega</string>
+    <string name="view_prob_class">VEDI CLASSIFICA PROBABILISTICA</string>
+    <string name="norm_class">VEDI CLASSIFICA NORMALE</string>
+    <string name="prob_class">CLASSIFICA PROBABILISTICA</string>
+    <string name="caricamento">Caricamento&#8230;</string>
+    <string name="p">P</string>
+    <string name="d">D</string>
+    <string name="c">C</string>
+    <string name="a">A</string>
+    <string name="sost">Numero sostituzioni:</string>
+    <string name="ammsv">Assegna voto ad ammonito sv:</string>
+    <string name="si">Sì</string>
+    <string name="no">No</string>
+    <string name="base">Soglia gol:</string>
+    <string name="fascia">Valore fascia:</string>
+    <string name="intorno">Fascia con intorno:</string>
+    <string name="differenza">Differenza punti:</string>
+    <string name="pareggio">Controlla pareggio:</string>
+    <string name="pimbattuto">Portiere imbattuto:</string>
+    <string name="mod">Modificatore difesa:</string>
+    <string name="crash_toast_text">OPS</string>
+    <string name="cerca">Cerca</string>
+    <array name="FG">
+        <item>1</item>
+        <item>24</item>
+        <item>2</item>
+        <item>21</item>
+        <item>22</item>
+        <item>6</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>107</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>129</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+    </array>
+    <array name="squadre">
+        <item>ATALANTA</item>
+        <item>BENEVENTO</item>
+        <item>BOLOGNA</item>
+        <item>CAGLIARI</item>
+        <item>CROTONE</item>
+        <item>FIORENTINA</item>
+        <item>GENOA</item>
+        <item>INTER</item>
+        <item>JUVENTUS</item>
+        <item>LAZIO</item>
+        <item>MILAN</item>
+        <item>NAPOLI</item>
+        <item>PARMA</item>
+        <item>ROMA</item>
+        <item>SAMPDORIA</item>
+        <item>SASSUOLO</item>
+        <item>SPEZIA</item>
+        <item>TORINO</item>
+        <item>UDINESE</item>
+        <item>VERONA</item>
+    </array>
+
+    <!--
+        BRESCIA:118
+        LECCE:119
+        SPAL:25
+    -->
+
+</resources>

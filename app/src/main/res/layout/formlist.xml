@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10">
+
+    <TextView
+        android:id="@+id/Role"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/Name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:layout_weight="7"/>
+
+            <TextView
+                android:id="@+id/Team"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="3"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:id="@+id/next"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/Match"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/Prob"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="3"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/stats"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/Media"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/Pres"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/Gol"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="1.2"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/Amm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="0.8"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/Esp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="0.8"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/Ass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dip"
+                android:paddingBottom="3dip"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                android:layout_weight="1.2"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white">
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:weightSum="2"
+        android:background="#FF01AEF0"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:padding="5dp"
+            android:textColor="#ffffff"
+            android:text="R"
+            android:textSize="17sp"
+            android:layout_weight="0.15"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:text="NOME"
+            android:layout_weight="0.9"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:text="SQUADRA"
+            android:layout_weight="0.7"/>
+
+        <TextView
+            android:id="@+id/prezzo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:layout_weight="0.25"
+            android:text="C"
+            android:gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"
+            android:background="#FF01AEF0"
+            android:id="@+id/squadra"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="10dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dropdown"
+            app:fabSize="mini"
+            app:elevation="4dp"
+            app:backgroundTint="#1274AF"
+            android:layout_gravity="end|center"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lista"/>
+        <ListView
+            android:id="@+id/spinner2"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:layout_gravity="end|top"/>
+    </FrameLayout>
+
+</LinearLayout>
+
+

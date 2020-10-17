@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:id="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/spinner"
+            android:layout_weight="36"
+            android:paddingRight="8dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="Pg"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:id="@+id/enabled"
+            android:text="Mv"
+            android:layout_weight="12"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="Mf"
+            android:layout_weight="12"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="G"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="As"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="Am"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <com.live.Ordina
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="19sp"
+            android:text="Es"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="8dp"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@id/listView"/>
+
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/radio"
+    android:orientation="vertical"
+    android:layout_margin="10dp">
+
+    <RadioButton android:id="@+id/disattivate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_disattiva"/>
+
+    <RadioButton android:id="@+id/tutte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tutti"
+        android:layout_marginTop="5dp"/>
+
+    <RadioButton android:id="@+id/miasquadra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/miasquadra"
+        android:layout_marginTop="5dp"/>
+
+    <RadioButton android:id="@+id/miapartita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/miapartita"
+        android:layout_marginTop="5dp"/>
+</RadioGroup>

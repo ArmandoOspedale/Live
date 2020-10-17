@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_ordina" android:title="@string/action_ordina"
+        android:orderInCategory="100" android:icon="@drawable/ordina"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/action_nome" android:title="@string/action_nome"
+                android:orderInCategory="200" app:showAsAction="never"/>
+            <item android:id="@+id/action_squadra" android:title="@string/action_squadra"
+                android:orderInCategory="200" app:showAsAction="never"/>
+            <item android:id="@+id/action_quot" android:title="@string/action_quot"
+                android:orderInCategory="200" app:showAsAction="never"/>
+        </menu>
+    </item>
+</menu>
