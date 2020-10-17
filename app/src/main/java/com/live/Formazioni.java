@@ -197,15 +197,13 @@ public class Formazioni extends AppCompatActivity {
                             });
                         }
                         while (!found && i < formazioni.length()) {
+                            JSONObject formazione = formazioni.getJSONObject(i);
                             if (tipo == 2) {
-                                JSONObject formazione = formazioni.getJSONObject(i);
                                 if (formazione.getJSONArray("sq").getJSONObject(0).getString("id").equals(codice)) {
                                     found = true;
                                     risultato.put("casa", squadra);
                                 }
-                                i++;
                             } else {
-                                JSONObject formazione = formazioni.getJSONObject(i);
                                 if (formazione.getJSONArray("sq").getJSONObject(0).getString("id").equals(codice)) {
                                     found = true;
                                     risultato.put("casa", squadra);
@@ -215,8 +213,8 @@ public class Formazioni extends AppCompatActivity {
                                         risultato.put("risultato", formazione.getString("rsr")); //TODO verificare
                                     }
                                 }
-                                i++;
                             }
+                            i++;
 
                         }
                         if (found) {
@@ -289,8 +287,6 @@ public class Formazioni extends AppCompatActivity {
                                         }
                                     }
                                     switch (players1.getJSONObject(j).getString("s")) {
-                                        case "":
-                                            break;
                                         case "E":
                                             temp.add(bonus_string[14]);
                                             break;
@@ -347,8 +343,6 @@ public class Formazioni extends AppCompatActivity {
                                         }
                                     }
                                     switch (players1.getJSONObject(j).getString("s")) {
-                                        case "":
-                                            break;
                                         case "E":
                                             temp.add(bonus_string[14]);
                                             break;
@@ -404,8 +398,6 @@ public class Formazioni extends AppCompatActivity {
                                         }
                                     }
                                     switch (players2.getJSONObject(j).getString("s")) {
-                                        case "":
-                                            break;
                                         case "E":
                                             temp.add(bonus_string[14]);
                                             break;

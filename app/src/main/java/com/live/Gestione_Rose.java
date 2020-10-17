@@ -152,24 +152,22 @@ public class Gestione_Rose extends AppCompatActivity {
                     }
                     for (int j = 0; j < max[k]; j++) {
                         int lunghezza = in_roles.length();
+                        HashMap<String, String> giocatore = new HashMap<>();
                         if (j < lunghezza) {
-                            HashMap<String, String> giocatore = new HashMap<>();
                             giocatore.put("Nome", in_roles.getJSONObject(j).getString("n"));
                             giocatore.put("Ruolo", in_roles.getJSONObject(j).getString("r"));
                             giocatore.put("Squadra", in_roles.getJSONObject(j).getString("s").toUpperCase().substring(0, 3));
                             giocatore.put("Costo", in_roles.getJSONObject(j).getString("cacq"));
                             pagato = pagato + Integer.parseInt(giocatore.get("Costo"));
                             giocatore.put("Codice", in_roles.getJSONObject(j).getString("id"));
-                            giocatori.add(giocatore);
                         } else {
-                            HashMap<String, String> giocatore = new HashMap<>();
                             giocatore.put("Nome", "");
                             giocatore.put("Ruolo", labels[k].toUpperCase());
                             giocatore.put("Squadra", "");
                             giocatore.put("Costo", "");
                             giocatore.put("Codice", "");
-                            giocatori.add(giocatore);
                         }
+                        giocatori.add(giocatore);
                     }
                 }
 

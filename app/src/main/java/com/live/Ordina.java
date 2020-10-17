@@ -52,11 +52,9 @@ class Ordina extends android.support.v7.widget.AppCompatTextView {
                     if (verso) {
                         verso = false;
                         setCompoundDrawables(null, null, up, null);
-                        adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
                     } else {
                         verso = true;
                         setCompoundDrawables(null, null, down, null);
-                        adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
                     }
                 } else {
                     LinearLayout l = ((LinearLayout) view.getParent());
@@ -69,8 +67,8 @@ class Ordina extends android.support.v7.widget.AppCompatTextView {
                     enabled = true;
                     verso = true;
                     setCompoundDrawables(null, null, down, null);
-                    adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
                 }
+                adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
             }
         });
     }

@@ -119,14 +119,11 @@ public class MainActivity extends AppCompatActivity {
         boolean reset = sh.getBoolean("reset1", true);
 
         if (cookie == null || reset) {
-            if (cookie == null) {
-                sh.edit().putBoolean("reset1", false).apply();
-                startActivityForResult(new Intent(this, LoginActivity.class), 1);
-            } else {
-                sh.edit().putBoolean("reset1", false).apply();
+            sh.edit().putBoolean("reset1", false).apply();
+            if (cookie != null) {
                 logOut();
-                startActivityForResult(new Intent(this, LoginActivity.class), 1);
             }
+            startActivityForResult(new Intent(this, LoginActivity.class), 1);
         } else {
             selezionaLega((int) HttpRequest.getObject(this, "indice_lega"), (int) HttpRequest.getObject(this, "indice_comp"));
         }
@@ -369,11 +366,10 @@ public class MainActivity extends AppCompatActivity {
                             map.put("NomeSquadra", r.select("td[data-key=teamName]").select("span").get(0).text());
                             if (comp.tipo != 2) {
                                 map.put("Punti", r.select("td[data-key=rank-pt]").text());
-                                map.put("Giocate", r.select("td[data-key=rank-g]").text());
                             } else {
                                 map.put("Punti", "0");
-                                map.put("Giocate", r.select("td[data-key=rank-g]").text());
                             }
+                            map.put("Giocate", r.select("td[data-key=rank-g]").text());
                             map.put("Totale", r.select("td[data-key=rank-fp]").text());
                         }
 

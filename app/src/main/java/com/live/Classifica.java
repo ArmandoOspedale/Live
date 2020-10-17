@@ -79,8 +79,8 @@ public class Classifica extends AppCompatActivity {
             try {
                 Document doc = HttpRequest.GET("/classifica?id=" + param[0], "breadcrumb");
 
+                JSONArray json_squadre = new JSONArray(doc.select("script[id=gyxmm02]").toString().split("jp\\('")[1].split("'\\)\\);")[0]);
                 if (tipo == 2 || tipo == 3) {
-                    JSONArray json_squadre = new JSONArray(doc.select("script[id=gyxmm02]").toString().split("jp\\('")[1].split("'\\)\\);")[0]);
 
                     for(int i = 0; i < json_squadre.length(); i++) {
 
@@ -99,7 +99,6 @@ public class Classifica extends AppCompatActivity {
                         }
                     }
                 } else {
-                    JSONArray json_squadre = new JSONArray(doc.select("script[id=gyxmm02]").toString().split("jp\\('")[1].split("'\\)\\);")[0]);
                     ArrayList<HashMap<String, String>> feedListA = new ArrayList<>();
                     ArrayList<HashMap<String, String>> feedListB = new ArrayList<>();
                     for(int i = 0; i < json_squadre.length(); i++) {
@@ -217,9 +216,9 @@ public class Classifica extends AppCompatActivity {
             try {
                 Document doc = HttpRequest.GET("/calendario?id=" + comp, "breadcrumb");
 
-                JSONArray giornate = new JSONObject(new String(Base64.decode(doc.select("script[id=s001]").toString().split("dp\\('")[1].split("'\\)\\);")[0], Base64.DEFAULT))).getJSONObject("data").getJSONObject("calendario").getJSONArray("calendario_incontri");
+                JSONArray giornate = new JSONObject(new String(Base64.decode(doc.select("script[id=s001]").toString().split("dp\\('")[1].split("'\\)\\);")[0], Base64.DEFAULT))).getJSONObject("data").getJSONObject("calendario").getJSONArray("c_inc");
                 for (int i = 0; i < giornate.length(); i++) {
-                    if (!giornate.getJSONObject(i).getBoolean("calcolata")) {
+                    if (!giornate.getJSONObject(i).getBoolean("cal")) {
                         giornate.remove(i);
                         i--;
                     }
@@ -228,20 +227,20 @@ public class Classifica extends AppCompatActivity {
                 String[][] dati = new String[squadre.length][giornate.length()];
                 int[][] risultati = new int[squadre.length][giornate.length()];
                 for (int i = 0; i < giornate.length(); i++) {
-                    JSONArray incontri = giornate.getJSONObject(i).getJSONArray("incontri");
+                    JSONArray incontri = giornate.getJSONObject(i).getJSONArray("inc");
                     JSONArray matches = new JSONArray();
                     int[] r = new int[incontri.length() * 2];
                     for (int j = 0; j < incontri.length(); j++) {
-                        String[] temp = incontri.getJSONObject(j).getString("risultato").split("-");
+                        String[] temp = incontri.getJSONObject(j).getString("res").split("-");
                         r[j * 2] = Integer.parseInt(temp[0]);
                         r[j * 2 + 1] = Integer.parseInt(temp[1]);
                         JSONObject a = new JSONObject();
-                        a.put("id", incontri.getJSONObject(j).getString("id_squadra_a"));
-                        a.put("p", incontri.getJSONObject(j).getString("punti_a"));
+                        a.put("id", incontri.getJSONObject(j).getString("id_a"));
+                        a.put("p", incontri.getJSONObject(j).getString("p_a"));
                         matches.put(a);
                         JSONObject b = new JSONObject();
-                        b.put("id", incontri.getJSONObject(j).getString("id_squadra_b"));
-                        b.put("p", incontri.getJSONObject(j).getString("punti_b"));
+                        b.put("id", incontri.getJSONObject(j).getString("id_b"));
+                        b.put("p", incontri.getJSONObject(j).getString("p_b"));
                         matches.put(b);
                     }
 

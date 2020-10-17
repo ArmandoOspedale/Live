@@ -54,8 +54,8 @@ public class Statistiche extends AppCompatActivity {
             try {
                 String data_stamp = HttpRequest.GET_nolega(strings[0], "col-lg-3 col-md-3 col-sm-12 col-xs-12 col-right").select("li[data-role=portieri").attr("data-stamp");
 
-                String header = "https://content.fantacalcio.it/web/statistiche/tabelle/2019-20/fantacalcio/riepilogo/";
-                String header2 = "https://content.fantacalcio.it/web/statistiche/tabelle/2019-20/fantacalcio/rigori/";
+                String header = "https://content.fantacalcio.it/web/statistiche/tabelle/2020-21/fantacalcio/riepilogo/";
+                String header2 = "https://content.fantacalcio.it/web/statistiche/tabelle/2020-21/fantacalcio/rigori/";
                 String[] urls = new String[]{header + "portieri" + data_stamp + ".txt",
                         header + "difensori" + data_stamp + ".txt", header + "centrocampisti" + data_stamp + ".txt",
                         header + "attaccanti" + data_stamp + ".txt", header2 + "centrocampisti" + data_stamp + ".txt",

@@ -521,9 +521,9 @@ public class Schiera extends AppCompatActivity {
                 v = LayoutInflater.from(context).inflate(R.layout.formlist, null);
             //}
             Player player = (Player) getItem(position);
-            TextView txt = (TextView) v.findViewById(R.id.Name);
+            TextView txt = v.findViewById(R.id.Name);
             txt.setText(player.nome);
-            txt = (TextView) v.findViewById(R.id.Role);
+            txt = v.findViewById(R.id.Role);
             switch (player.ruolo) {
                 case "P":txt.setBackgroundColor(Color.rgb(255, 225, 15)); break;
                 case "D":txt.setBackgroundColor(Color.rgb(0,128,10)); break;
@@ -531,7 +531,7 @@ public class Schiera extends AppCompatActivity {
                 case "A":txt.setBackgroundColor(Color.RED); break;
             }
             txt.setText(player.ruolo);
-            txt = (TextView) v.findViewById(R.id.Team);
+            txt = v.findViewById(R.id.Team);
             txt.setText(player.squadra);
 
             if (player.prob != null) {

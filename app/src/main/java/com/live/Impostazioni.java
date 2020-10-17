@@ -119,15 +119,14 @@ public class Impostazioni extends AppCompatActivity {
                 ((TextView) view).setText(String.valueOf(opzioni.mod[i]));
                 ((LinearLayout) findViewById(R.id.mod)).addView(view);
                 @SuppressLint("InflateParams") View fas_view = LayoutInflater.from(this).inflate(R.layout.mod, null);
+                String text;
                 if (i == opzioni.mod.length - 1) {
-                    String text = ">=" + opzioni.mod_max;
-                    ((TextView) fas_view).setText(text);
-                    ((LinearLayout) findViewById(R.id.fas)).addView(fas_view);
+                    text = ">=" + opzioni.mod_max;
                 } else {
-                    String text = "<" + (i == 0 ? opzioni.mod_min : opzioni.mod_min + i * 0.25d - 0.01d);
-                    ((TextView) fas_view).setText(text);
-                    ((LinearLayout) findViewById(R.id.fas)).addView(fas_view);
+                    text = "<" + (i == 0 ? opzioni.mod_min : opzioni.mod_min + i * 0.25d - 0.01d);
                 }
+                ((TextView) fas_view).setText(text);
+                ((LinearLayout) findViewById(R.id.fas)).addView(fas_view);
             }
         } else {
             ((RadioButton) findViewById(R.id.mod_no)).setChecked(true);

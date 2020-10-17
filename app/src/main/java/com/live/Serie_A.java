@@ -305,15 +305,15 @@ public class Serie_A extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
 
         if (!controllo) {
+            mAdapter adapter;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mAdapter adapter = new mAdapter(Serie_A.this, classifica, R.layout.land_serie_a_list,
+                adapter = new mAdapter(Serie_A.this, classifica, R.layout.land_serie_a_list,
                         new String[]{"Posizione", "Squadra", "Giocate", "Punti", "Vittorie", "Pareggi", "Sconfitte", "GolFatti", "GolSubiti"},
                         new int[]{R.id.Posizione, R.id.NomeSquadra, R.id.Giocate, R.id.Punti, R.id.Vinte, R.id.Pareggi, R.id.Perse, R.id.Golfatti, R.id.Golsubiti});
-                list.setAdapter(adapter);
             } else {
-                mAdapter adapter = new mAdapter(Serie_A.this, classifica, R.layout.class_serie_a_list, new String[]{"Posizione", "Squadra", "Giocate", "Punti"}, new int[]{R.id.Posizione, R.id.NomeSquadra, R.id.Giocate, R.id.Punti});
-                list.setAdapter(adapter);
+                adapter = new mAdapter(Serie_A.this, classifica, R.layout.class_serie_a_list, new String[]{"Posizione", "Squadra", "Giocate", "Punti"}, new int[]{R.id.Posizione, R.id.NomeSquadra, R.id.Giocate, R.id.Punti});
             }
+            list.setAdapter(adapter);
         }
     }
 
