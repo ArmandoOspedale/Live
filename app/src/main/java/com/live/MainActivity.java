@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                             hasGolSubito = true;
                     }
                 }
-                if(r == 'P' && v > 0 && hasGolSubito
+                if(r == 'P' && v > 0 && !hasGolSubito
                     && Double.compare(0d, new JSONObject(opzioni.bonus).getDouble("portiere_imbattuto")) != 0) {
                     temp.add(bonus[12]);
                 }

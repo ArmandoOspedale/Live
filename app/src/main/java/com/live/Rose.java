@@ -266,6 +266,7 @@ public class Rose extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_form, menu);
         menu.findItem(R.id.action_perc).setVisible(true);
+        menu.findItem(R.id.action_perc).setEnabled(false);
         menu.findItem(R.id.action_perc).setTitle("CREDITI: " + crediti_squadra);
 
         return true;
