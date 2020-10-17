@@ -424,7 +424,8 @@ public class Schiera extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!modulo.equals("-") && p==0 && d==0 && c==0 && a==0 && bench[0]==0 && bench[1]==0 && bench[2]==0 && bench[3]==0) {
+                if (!modulo.equals("-") && p==0 && d==0 && c==0 && a==0
+                        && ((bench[0]==0 && bench[1]==0 && bench[2]==0 && bench[3]==0) || orderbench.contains("L"))) {
                     String[] codici = new String[11];
                     int n = 0;
                     for (int p : genera(typebench)) { n = n + p; }
@@ -434,6 +435,7 @@ public class Schiera extends AppCompatActivity {
                         if (p.incampo) { codici[j] = p.codice; j++; }
                         if (p.inpanchina) { codp[p.order] = p.codice; }
                     }
+                    codp = removeNullEntries(codp);
                     final String [] dati = new String[]{"", ""};
                     for (int i = 0; i < codici.length; i++) {
                         dati[0] = dati[0] + codici[i] + (i == codici.length - 1 ? "" : ",");
@@ -459,7 +461,20 @@ public class Schiera extends AppCompatActivity {
         });
     }
 
-    private int [] genera (String s) {
+    private String[] removeNullEntries(String[] input) {
+        int size = 0;
+        for (String s : input) {
+            if (s == null)
+                break;
+            else
+                size++;
+        }
+        String[] output = new String[size];
+        if (size >= 0) System.arraycopy(input, 0, output, 0, size);
+        return output;
+    }
+
+    private int[] genera (String s) {
         String[] panch = s.split(",");
         int[] p = new int[panch.length];
         for (int i = 0; i < panch.length; i++) {
@@ -520,25 +535,25 @@ public class Schiera extends AppCompatActivity {
             txt.setText(player.squadra);
 
             if (player.prob != null) {
-                txt = (TextView) v.findViewById(R.id.Match);
+                txt = v.findViewById(R.id.Match);
                 txt.setText(player.contro);
-                txt = (TextView) v.findViewById(R.id.Prob);
+                txt = v.findViewById(R.id.Prob);
                 txt.setText(player.prob);
                 v.findViewById(R.id.next).setVisibility(View.VISIBLE);
             }
 
             if (player.media != null) {
-                txt = (TextView) v.findViewById(R.id.Media);
+                txt = v.findViewById(R.id.Media);
                 txt.setText(player.media);
-                txt = (TextView) v.findViewById(R.id.Pres);
+                txt = v.findViewById(R.id.Pres);
                 txt.setText(player.stats[0]);
-                txt = (TextView) v.findViewById(R.id.Gol);
+                txt = v.findViewById(R.id.Gol);
                 txt.setText(player.stats[1]);
-                txt = (TextView) v.findViewById(R.id.Amm);
+                txt = v.findViewById(R.id.Amm);
                 txt.setText(player.stats[2]);
-                txt = (TextView) v.findViewById(R.id.Esp);
+                txt = v.findViewById(R.id.Esp);
                 txt.setText(player.stats[3]);
-                txt = (TextView) v.findViewById(R.id.Ass);
+                txt = v.findViewById(R.id.Ass);
                 txt.setText(player.stats[4]);
                 v.findViewById(R.id.stats).setVisibility(View.VISIBLE);
             }

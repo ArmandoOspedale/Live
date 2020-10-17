@@ -148,9 +148,9 @@ public class PartitaLive_Fragment extends Fragment {
         protected String[] doInBackground(Integer... ints) {
             try {
                 position = ints[0];
-                String votiA = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live/" + idA + "?g=" + giornata + "&i=14");
-                String votiB = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live/" + idB + "?g=" + giornata + "&i=14");
-                String eventi = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live?g=" + giornata + "&a=" + idA + "&b=" + idB + "&i=14");
+                String votiA = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live/" + idA + "?g=" + giornata + "&i=15");
+                String votiB = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live/" + idB + "?g=" + giornata + "&i=15");
+                String eventi = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/live?g=" + giornata + "&a=" + idA + "&b=" + idB + "&i=15");
 
                 return new String[] {
                         HttpRequest.GET_nodocument("https://m.tuttomercatoweb.com" + partita), votiA, votiB, eventi};
