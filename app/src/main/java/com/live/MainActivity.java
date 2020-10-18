@@ -1767,7 +1767,9 @@ public class MainActivity extends AppCompatActivity {
             p1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(MainActivity.this, "Modificatore " + result[0][0].getFanta() + ": " + mod_dif[0] + "\nModificatore " + result[1][0].getFanta() + ": " + mod_dif[1], Toast.LENGTH_SHORT).show();
+                    if (opzioni.mod_checked) {
+                        Toast.makeText(MainActivity.this, "Modificatore " + result[0][0].getFanta() + ": " + mod_dif[0] + "\nModificatore " + result[1][0].getFanta() + ": " + mod_dif[1], Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

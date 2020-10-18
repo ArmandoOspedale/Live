@@ -161,6 +161,7 @@ public class ClassificaGiornata extends AppCompatActivity {
                 String n = pl.getString("n");
                 char r = pl.getString("r").charAt(0);
                 String s = pl.getString("t").toUpperCase();
+                boolean hasGolSubito = false;
 
                 int j = -1;
                 boolean found = false;
@@ -209,7 +210,13 @@ public class ClassificaGiornata extends AppCompatActivity {
                 for (int k = 0; k < b.length(); k++) {
                     if(b.getInt(k) > 0) {
                         temp.add(bonus[b.getInt(k) - 1]);
+                        if("golsubito_s".equals(bonus[b.getInt(k) - 1]))
+                            hasGolSubito = true;
                     }
+                }
+                if(r == 'P' && v > 0 && !hasGolSubito
+                        && Double.compare(0d, new JSONObject(opzioni.bonus).getDouble("portiere_imbattuto")) != 0) {
+                    temp.add(bonus[12]);
                 }
 
                 switch (pl.getString("s")) {
@@ -239,64 +246,71 @@ public class ClassificaGiornata extends AppCompatActivity {
         try {
             Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it", "<!-- INIZIO CONTAINER PRIMO BLOCCO CONTENUTO SU DUE COLONNE -->");
 
-            Elements live = doc.select("div[class=col-lg-12 col-md-12 col-sm-12 col-xs-12 rel no-gutter item active]");
+            String[] cal = new String[10];
+            if(doc.select("div[class=live-strip]").size() > 0) {
+                Elements live = doc.select("div[class=live-strip]");
+                Elements rows;
+                if(live.size() > 1)
+                    rows = doc.select("div[class=live-strip]").get(1).children();
+                else
+                    rows = doc.select("div[class=live-strip]").get(0).children();
 
-            Elements rows = live.select("div[class=matchs]");
+                rows.remove(0);
 
-            String [] cal = new String[10];
-            for (int i = 0; i < 10; i++) {
-                String id = rows.get(i).attr("id");
+                for (int i = 0; i < 10; i++) {
+                    String id = rows.get(i).attr("id");
 
-                String teamA;
-                String teamB;
-                String temp = "";
-                String stato;
+                    String teamA;
+                    String teamB;
+                    String temp = "";
+                    String stato;
 
-                if (id.equals("")) {
-                    teamA = rows.get(i).select("div[class=liver]").get(0).select("img").attr("alt").toUpperCase();
-                    teamB = rows.get(i).select("div[class=liver]").get(1).select("img").attr("alt").toUpperCase();
-                    stato = "grey";
-                } else {
-                    teamA = rows.get(i).select("div[class=liver]").get(0).attr("data-team").toUpperCase();
-                    teamB = rows.get(i).select("div[class=liver]").get(1).attr("data-team").toUpperCase();
-                    temp = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/livestatus/" + id.substring(1));
-                    temp = temp.substring(1, temp.length() - 1);
-                    stato = temp.split(",")[1];
-                    switch (stato) {
-                        case "0":
-                            stato = "blue";
-                            break;
-                        case "1":
-                        case "3":
-                            stato = "status";
-                            break;
-                        case "2":
-                            stato = "orange";
-                            break;
-                        case "4":
-                            stato = "grey";
-                            break;
+                    if (id.equals("")) {
+                        teamA = rows.get(i).select("div[class=liver team-row]").get(0).select("img").attr("alt").toUpperCase();
+                        teamB = rows.get(i).select("div[class=liver team-row]").get(1).select("img").attr("alt").toUpperCase();
+                        stato = "grey";
+                    } else {
+                        teamA = rows.get(i).select("div[class=liver team-row]").get(0).attr("data-team").toUpperCase();
+                        teamB = rows.get(i).select("div[class=liver team-row]").get(1).attr("data-team").toUpperCase();
+                        temp = HttpRequest.GET_nodocument("https://www.fantacalcio.it/api/livestatus/" + id.substring(1));
+                        temp = temp.substring(1, temp.length() - 1);
+                        stato = temp.split(",")[1];
+                        switch (stato) {
+                            case "0":
+                                stato = "blue";
+                                break;
+                            case "1":
+                            case "3":
+                                stato = "status";
+                                break;
+                            case "2":
+                                stato = "orange";
+                                break;
+                            case "4":
+                                stato = "grey";
+                                break;
+                        }
                     }
+
+                    cal[i] = teamA + teamB + "<>" + stato + "<>";
+
+                    String time = rows.get(i).select("div[class=match-date]").text().substring(rows.get(i).select("div[class=match-date]").text().lastIndexOf(" ") + 1);
+                    if (stato.equals("status")) {
+                        cal[i] = cal[i] + temp.split(",")[0] + "'" + "<>";
+                    } else {
+                        cal[i] = cal[i] + time + "<>";
+                    }
+
+                    cal[i] = cal[i] + rows.get(i).select("div[class=match-date]").text().split(" " + time)[0] + "<>";
+                    cal[i] = cal[i] + rows.get(i).select("div[class=liver team-row]").get(0).select("span").get(2).text() + "-" +
+                            rows.get(i).select("div[class=liver team-row]").get(1).select("span").get(2).text();
                 }
-
-                cal[i] = teamA + teamB + "<>" + stato + "<>";
-
-                String time = rows.get(i).select("div[class=dlabel]").text().split(" ")[3];
-                if (stato.equals("status")) {
-                    cal[i] = cal[i] + temp.split(",")[0] + "'" + "<>";
-                } else {
-                    cal[i] = cal[i] + time + "<>";
-                }
-
-                cal[i] = cal[i] + rows.get(i).select("div[class=dlabel]").text().split(" " + time)[0] + "<>";
-                cal[i] = cal[i] + rows.get(i).select("div[class=liver]").get(0).select("span").get(2).text() + "-" +
-                        rows.get(i).select("div[class=liver]").get(1).select("span").get(2).text();
             }
 
             return cal;
         } catch (Exception e) {
             e.printStackTrace();
-            return new String[] {"JUVENTUSROMALAZIONAPOLIFIORENTINASAMPDORIAGENOATORINOINTERMILANPALERMOUDINESEEMPOLISASSUOLOCAGLIARICHIEVOPESCARAATALANTABOLOGNACROTONEgrey"};
+            return new String[] {"JUVENTUSROMALAZIONAPOLIFIORENTINASAMPDORIAGENOATORINOINTERMILANPALERMOUDINESEEMPOLISASSUOLOCAGLIARICHIEVOPESCARAATALANTABOLOGNACROTONEBENEVENTOSPEZIAgrey"};
         }
     }
 
