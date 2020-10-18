@@ -67,6 +67,7 @@ public class ClassificaGiornata extends AppCompatActivity {
         codici = i.getStringArrayExtra("codici");
         opzioni = (Opzioni_lega) HttpRequest.getObject(ClassificaGiornata.this, HttpRequest.lega);
 
+        srl.setRefreshing(true);
         new DownloadClass().execute(comp);
     }
 
