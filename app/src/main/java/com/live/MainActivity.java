@@ -9,8 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -243,10 +245,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String [] downloadPartite () {
+        String[] cal = new String[10];
         try {
             Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it", "<!-- INIZIO CONTAINER PRIMO BLOCCO CONTENUTO SU DUE COLONNE -->");
 
-            String[] cal = new String[10];
             if(doc.select("div[class=live-strip]").size() > 0) {
                 Elements live = doc.select("div[class=live-strip]");
                 Elements rows;
@@ -306,13 +308,54 @@ public class MainActivity extends AppCompatActivity {
                     cal[i] = cal[i] + rows.get(i).select("div[class=liver team-row]").get(0).select("span").get(2).text() + "-" +
                             rows.get(i).select("div[class=liver team-row]").get(1).select("span").get(2).text();
                 }
-            }
+            } else {
+                Document ultima_doc = HttpRequest.GET_nolega("https://www.fantacalcio.it/serie-a/ultima-giornata", "col-xs-12 col-md-4 col-sticky hidden-xs");
+                Elements all = ultima_doc.select("div[class=col-xs-12]").get(0).children();
+                HashMap<Element, String> map = new LinkedHashMap<>();
+                String data = "";
+                for(Element el : all) {
+                    if("subtitle greytxt1".equals(el.attr("class"))) {
+                        data = mapWeekDay(el.text());
+                    } else if ("match-row".equals(el.attr("class"))){
+                        map.put(el, data);
+                    }
+                }
 
+                serieA = ultima_doc.select("p[class=titalign text-right").text().split("ª")[0];
+
+                int i = 0;
+                for (Map.Entry<Element, String> entry : map.entrySet()) {
+                    String teamA = entry.getKey().select("div[class=team home]").get(0).select("img").attr("alt").toUpperCase();
+                    String teamB = entry.getKey().select("div[class=team away]").get(0).select("img").attr("alt").toUpperCase();
+                    String stato = "grey";
+
+                    cal[i] = teamA + teamB + "<>" + stato + "<>";
+
+                    String time = entry.getKey().select("div[class=time-status]").select("div[class=ui-time time]").text();
+                    cal[i] = cal[i] + time + "<>";
+
+                    cal[i] = cal[i] + entry.getValue() + "<>";
+                    cal[i] = cal[i] + entry.getKey().select("span[class=home]").text() + "-" +
+                            entry.getKey().select("span[class=away]").text();
+                    i++;
+                }
+            }
             return cal;
         } catch (Exception e) {
             e.printStackTrace();
-            return new String[] {"JUVENTUSROMALAZIONAPOLIFIORENTINASAMPDORIAGENOATORINOINTERMILANPALERMOUDINESEEMPOLISASSUOLOCAGLIARICHIEVOPESCARAATALANTABOLOGNACROTONEBENEVENTOSPEZIAgrey"};
+            String [] squadre = getResources().getStringArray(R.array.squadre);
+            for(int i = 0; i < squadre.length / 2; i++) {
+                cal[i] = squadre[i * 2] + squadre[i * 2 + 1] + "<>" + "grey" + "<>" + "-<>" + "-<>" + "-<>";
+            }
+            return cal;
         }
+    }
+
+    private String mapWeekDay(String input) {
+        return input.toLowerCase().replace("lunedì", "Lun").replace("martedì", "Mar")
+                .replace("mercoledì", "Mer").replace("giovedì", "Gio")
+                .replace("venerdì", "Ven").replace("sabato", "Sab")
+                .replace("domenica", "Dom");
     }
 
     private boolean verificaLive () {
@@ -1255,6 +1298,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         if (matches.get(i).get("stato").equals("blue")) {
                             Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
+                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent fg = new Intent(MainActivity.this, PartitaLive.class);
                             fg.putExtra("title", "Voti & Cronaca");
@@ -1491,6 +1536,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         if (matches.get(i).get("stato").equals("blue")) {
                             Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
+                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent fg = new Intent(MainActivity.this, PartitaLive.class);
                             fg.putExtra("title", "Voti & Cronaca");
@@ -1688,6 +1735,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         if (matches.get(i).get("stato").equals("blue")) {
                             Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
+                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent fg = new Intent(MainActivity.this, PartitaLive.class);
                             fg.putExtra("title", "Voti & Cronaca");
@@ -2236,7 +2285,8 @@ public class MainActivity extends AppCompatActivity {
             }
             match = casa + " - " + trasf;
             menu.setHeaderTitle(match);
-            if (!matches.get(i).get("stato").equals("blue")) {
+            if (!matches.get(i).get("stato").equals("blue")
+                    && !matches.get(i).get("data").equals("-") && !matches.get(i).get("risultato").equals("-")) {
                 menu.add("Voti & Cronaca");
             }
             menu.add("Pagina fantacalcio");

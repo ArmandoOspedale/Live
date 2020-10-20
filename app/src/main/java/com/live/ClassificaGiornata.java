@@ -244,10 +244,10 @@ public class ClassificaGiornata extends AppCompatActivity {
     }
 
     private String [] downloadPartite () {
+        String[] cal = new String[10];
         try {
             Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it", "<!-- INIZIO CONTAINER PRIMO BLOCCO CONTENUTO SU DUE COLONNE -->");
 
-            String[] cal = new String[10];
             if(doc.select("div[class=live-strip]").size() > 0) {
                 Elements live = doc.select("div[class=live-strip]");
                 Elements rows;
@@ -306,12 +306,20 @@ public class ClassificaGiornata extends AppCompatActivity {
                     cal[i] = cal[i] + rows.get(i).select("div[class=liver team-row]").get(0).select("span").get(2).text() + "-" +
                             rows.get(i).select("div[class=liver team-row]").get(1).select("span").get(2).text();
                 }
+            } else {
+                String [] squadre = getResources().getStringArray(R.array.squadre);
+                for(int i = 0; i < squadre.length / 2; i++) {
+                    cal[i] = squadre[i * 2] + squadre[i * 2 + 1] + "<>" + "grey" + "<>" + "-<>" + "-<>" + "-<>";
+                }
             }
-
             return cal;
         } catch (Exception e) {
             e.printStackTrace();
-            return new String[] {"JUVENTUSROMALAZIONAPOLIFIORENTINASAMPDORIAGENOATORINOINTERMILANPALERMOUDINESEEMPOLISASSUOLOCAGLIARICHIEVOPESCARAATALANTABOLOGNACROTONEBENEVENTOSPEZIAgrey"};
+            String [] squadre = getResources().getStringArray(R.array.squadre);
+            for(int i = 0; i < squadre.length / 2; i++) {
+                cal[i] = squadre[i * 2] + squadre[i * 2 + 1] + "<>" + "grey" + "<>" + "-<>" + "-<>" + "-<>";
+            }
+            return cal;
         }
     }
 
