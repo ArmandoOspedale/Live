@@ -251,12 +251,12 @@ public class MainActivity extends AppCompatActivity {
             Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it", "<!-- INIZIO CONTAINER PRIMO BLOCCO CONTENUTO SU DUE COLONNE -->");
 
             if(doc.select("div[class=live-strip]").size() > 0) {
-                Elements live = doc.select("div[class=live-strip]");
+                Elements liveStrip = doc.select("div[class=live-strip]");
                 Elements rows;
-                if(live.size() > 1)
-                    rows = doc.select("div[class=live-strip]").get(1).children();
+                if(liveStrip.size() > 1 && !live)
+                    rows = liveStrip.get(1).children();
                 else
-                    rows = doc.select("div[class=live-strip]").get(0).children();
+                    rows = liveStrip.get(0).children();
 
                 serieA = rows.select("small").text().split("ª")[0];
                 rows.remove(0);
@@ -1698,15 +1698,23 @@ public class MainActivity extends AppCompatActivity {
                     json = new JSONObject(rd.readLine());
                 }
                 JSONArray json_data = json.getJSONObject("data").getJSONArray("formazioni").getJSONObject(0).getJSONArray("sq");
-                publishProgress(65);
-                Giocatore[] casa = downloadLive(partite, json_data.getJSONObject(0));
-                publishProgress(80);
-                Giocatore[] trasf = downloadLive(partite, json_data.length() > 1 ? json_data.getJSONObject(1) : null);
-                publishProgress(95);
+                publishProgress(40);
+                Giocatore[] casa;
+                Giocatore[] trasf;
+                if(json_data.length() > 0) {
+                    casa = downloadLive(partite, json_data.getJSONObject(0));
+                    publishProgress(65);
+                    trasf = downloadLive(partite, json_data.length() > 1 ? json_data.getJSONObject(1) : null);
+                } else {
+                    casa = new Giocatore[]{new Giocatore("")};
+                    trasf = new Giocatore[]{new Giocatore("")};
+                }
+                publishProgress(90);
                 // TODO: vedere se c'è soluzione più efficace
                 // check recupero
                 return new Giocatore[][]{casa, trasf};
             } catch (IOException | JSONException e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -1790,22 +1798,28 @@ public class MainActivity extends AppCompatActivity {
 
             risultato.put("punteggio", (c == 0 ? "    " : c) + (c == 0 || t == 0 ? "       " : "   -   ") + (t == 0 ? "    " : t));
 
+            ListView p1 = findViewById(R.id.risultato);
             if (result[0].length > 1 && result[1].length > 1) {
+                findViewById(R.id.nessuna).setVisibility(View.GONE);
+                p1.setVisibility(View.VISIBLE);
+                listc.setVisibility(View.VISIBLE);
+                listt.setVisibility(View.VISIBLE);
                 int [] score = risultato(c, t);
                 risultato.put("result", score[0] + "   -   " + score[1]);
 
                 pb.setProgress(100);
                 pb.setVisibility(GONE);
+            } else if (result[0].length == 1 && result[1].length == 1) {
+                TextView info = (TextView) findViewById(R.id.nessuna);
+                info.setText("NESSUNA FORMAZIONE TROVATA PER LA COMPETIZIONE SELEZIONATA");
+                info.setVisibility(View.VISIBLE);
+                p1.setVisibility(View.GONE);
+                listc.setVisibility(View.GONE);
+                listt.setVisibility(View.GONE);
             }
-            /*else if (result[0].length == 1 && result[1].length == 1) {
-                if (!info.equals("")) {
-                    Toast.makeText(MainActivity.this, info, Toast.LENGTH_LONG).show();
-                }
-            }*/
 
             List<HashMap<String,String>> feedlist = new ArrayList<>();
             feedlist.add(risultato);
-            ListView p1 = findViewById(R.id.risultato);
             SimpleAdapter adapter1 =
                     new SimpleAdapter (MainActivity.this, feedlist, R.layout.calenlist, new String []{"casa", "trasf", "punteggio", "result"}, new int [] {R.id.casa, R.id.trasf, R.id.punteggio, R.id.result});
             p1.setAdapter(adapter1);

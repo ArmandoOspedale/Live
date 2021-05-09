@@ -65,6 +65,16 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:listSelector="@android:color/transparent"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/nessuna"
+                android:textColor="#444444"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

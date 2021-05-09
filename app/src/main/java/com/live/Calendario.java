@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 
 public class Calendario extends AppCompatActivity {
@@ -111,7 +112,7 @@ public class Calendario extends AppCompatActivity {
         @Override
         public Object getItem(int i) {
             int giornata = i/partite;
-            return giornate[giornata][i - giornata*partite];
+            return giornate[giornata][i - giornata * partite];
         }
 
         @Override
@@ -121,7 +122,7 @@ public class Calendario extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return giornate.length*partite;
+            return giornate.length * partite;
         }
 
         @Override
@@ -141,15 +142,17 @@ public class Calendario extends AppCompatActivity {
                         ((String) getItem(i)).split("-")[0] + "° Giornata <small><font color=#1274AF>(" +
                         ((String) getItem(i)).split("-")[1] + "° giornata di Serie A)</font></small></h4>"));
             } else {
-                if (i / partite < current) {
+                if (current == -1 || i / partite < current) {
                     view = LayoutInflater.from(Calendario.this).inflate(R.layout.calenlist, null);
 
                     String match = (String) getItem(i);
-                    String[] dati = match.split("/");
-                    ((TextView) view.findViewById(R.id.casa)).setText(dati[0]);
-                    ((TextView) view.findViewById(R.id.trasf)).setText(dati[1]);
-                    ((TextView) view.findViewById(R.id.punteggio)).setText(dati[2]);
-                    ((TextView) view.findViewById(R.id.result)).setText(dati[3]);
+                    if(!StringUtil.isBlank(match)) {
+                        String[] dati = match.split("/");
+                        ((TextView) view.findViewById(R.id.casa)).setText(dati[0]);
+                        ((TextView) view.findViewById(R.id.trasf)).setText(dati[1]);
+                        ((TextView) view.findViewById(R.id.punteggio)).setText(dati[2]);
+                        ((TextView) view.findViewById(R.id.result)).setText(dati[3]);
+                    }
                 } else {
                     view = LayoutInflater.from(Calendario.this).inflate(R.layout.row, null);
 

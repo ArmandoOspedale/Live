@@ -511,6 +511,7 @@ public class Formazioni extends AppCompatActivity {
 
             if (c) {
                 findViewById(R.id.nessuna).setVisibility(View.GONE);
+                p1.setVisibility(View.VISIBLE);
                 list.setVisibility(View.VISIBLE);
                 ha1 = new HeaderAdapter(Formazioni.this, casa, false);
                 list.setAdapter(ha1);
@@ -551,6 +552,7 @@ public class Formazioni extends AppCompatActivity {
                     TextView t = (TextView) findViewById(R.id.nessuna);
                     t.setText("NESSUNA FORMAZIONE TROVATA PER LA COMPETIZIONE SELEZIONATA");
                     t.setVisibility(View.VISIBLE);
+                    p1.setVisibility(View.GONE);
                     list.setVisibility(View.GONE);
                 } else {
                     ArrayAdapter<String> ad = new ArrayAdapter<>(Formazioni.this, R.layout.row2, R.id.row, new String[]{result[0]});
