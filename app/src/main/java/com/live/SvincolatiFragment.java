@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +20,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import junit.framework.Assert;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.net.URL;

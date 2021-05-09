@@ -6,14 +6,14 @@ import android.content.res.Configuration;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.PagerTabStrip;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -67,7 +67,7 @@ public class Serie_A extends AppCompatActivity {
         protected List<HashMap<String, String>> doInBackground(Void... voids) {
             try {
                 List<HashMap<String, String>> temp = new ArrayList<>();
-                Document doc = HttpRequest.GET_nolega("http://www.legaseriea.it/it/serie-a-tim/classifica", "Ultime news su Serie A TIM");
+                Document doc = HttpRequest.GET_nolega("https://www.legaseriea.it/it/serie-a/classifica", "Ultime news su Serie A TIM");
 
                 Elements rows = doc.select("div[id=classifiche]").select("tr");
                 rows.remove(0);
@@ -91,6 +91,7 @@ public class Serie_A extends AppCompatActivity {
 
                 return temp;
             } catch (IOException e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -165,7 +166,7 @@ public class Serie_A extends AppCompatActivity {
                 andata.addAll(ritorno);
                 return andata;*/
 
-                Document doc = HttpRequest.GET_nolega("http://www.legaseriea.it/it/serie-a-tim/calendario-e-risultati", "Ultime news su Serie A TIM");
+                Document doc = HttpRequest.GET_nolega("https://www.legaseriea.it/it/serie-a/calendario-e-risultati", "Ultime news su Serie A TIM");
 
                 Elements g = doc.select("div[id=menu-giornate]").select("li");
                 g.remove(20);
@@ -173,7 +174,7 @@ public class Serie_A extends AppCompatActivity {
                 giornate = new String[g.size()][];
                 links = new String[g.size()];
                 for (int i = 0; i < g.size(); i++) {
-                    links[i] = "http://www.legaseriea.it" + g.get(i).select("a").get(0).attr("href");
+                    links[i] = "https://www.legaseriea.it" + g.get(i).select("a").get(0).attr("href");
                     if (g.get(i).select("a").get(0).attr("class").equals("active")) {
                         current = i;
                     }

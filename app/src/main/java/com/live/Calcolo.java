@@ -173,9 +173,11 @@ class Calcolo extends Dialog {
 
                     JSONArray json_data = json.getJSONArray("data");
                     List<String> temp = new ArrayList<>();
+                    int temp_index = -1;
                     for(int i = 0; i < json_data.length(); i++) {
                         if (!json_data.getJSONObject(i).getBoolean("c")) {
                             temp.add(json_data.getJSONObject(i).getString("g"));
+                            temp_index++;
 
                             if (!json_data.getJSONObject(i).getString("r").equals("null")) {
                                 List<String> temp_rinvio = new ArrayList<>();
@@ -184,7 +186,7 @@ class Calcolo extends Dialog {
                                     temp_rinvio.add(json_rinvio.getJSONObject(j).getString("id_a"));
                                     temp_rinvio.add(json_rinvio.getJSONObject(j).getString("id_b"));
                                 }
-                                rinvio.put(temp.get(i), temp_rinvio);
+                                rinvio.put(temp.get(temp_index), temp_rinvio);
                             }
                         }
                     }

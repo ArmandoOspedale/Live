@@ -8,10 +8,9 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -683,7 +684,7 @@ public class Formazioni extends AppCompatActivity {
             try {
                 Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it/probabili-formazioni-serie-A", "<!-- FINE CONTAINER PRIMO BLOCCO CONTENUTO  SU DUE COLONNE -->");
 
-                Elements matches = doc.select("div[id=sqtab]").get(0).children();
+                Elements matches = doc.select("div[class=match-list lazy-viewport]").get(0).children();
 
                 if (casa != null) {
                     for (Giocatore g : casa) {
@@ -717,15 +718,15 @@ public class Formazioni extends AppCompatActivity {
 
                         Elements team;
                         if (casa) {
-                            team = matches.get(j).select("div[class=pgroup lf]");
+                            team = matches.get(j).select("div[class=col player-list home]").select("a");
                         } else {
-                            team = matches.get(j).select("div[class=pgroup rt]");
+                            team = matches.get(j).select("div[class=col player-list away]").select("a");
                         }
 
                         int k = 0;
                         found = false;
                         while (!found && k < team.size()) {
-                            if (team.get(k).select("a").text().equals(nome.toUpperCase())) {
+                            if (team.get(k).select("span[class=player-name]").text().equals(nome.toLowerCase())) {
                                 k--;
                                 found = true;
                             }
@@ -733,14 +734,14 @@ public class Formazioni extends AppCompatActivity {
                         }
 
                         if (found) {
-                            Elements perc = team.get(k).select("span[class=perc]");
-                            if (perc.size() == 1) {
+                            Elements perc = team.get(k).select("span[class=player-percentage-value]");
+                            if (k <= 11) {
                                 g.setStringaVoto(perc.get(0).text());
                             } else {
                                 g.setStringaVoto("sub");
-                                Elements ballottaggi = matches.get(j).select("div[class=pgroup]");
+                                Elements ballottaggi = matches.get(j).select("div[class=col box]");
                                 for (int i = 0; i < ballottaggi.size(); i++) {
-                                    if (!ballottaggi.get(i).select("span").get(0).text().equals("BALLOTTAGGI")) {
+                                    if (ballottaggi.get(i).select("span").size() == 0 || !ballottaggi.get(i).select("span").get(0).text().equals("BALLOTTAGGI")) {
                                         ballottaggi.remove(i);
                                         i--;
                                     }
@@ -749,7 +750,7 @@ public class Formazioni extends AppCompatActivity {
                                 HashMap<String, String> ballot = new HashMap<>();
                                 Elements p = ballottaggi.select("p");
                                 for (int i = 0; i < p.size(); i++) {
-                                    Elements nomi = p.get(i).select("span[class=bold]");
+                                    Elements nomi = p.get(i).select("b");
                                     String[] stemp = p.get(i).text().split(" ");
                                     List<String> percs = new ArrayList<>();
                                     for (String s : stemp) {
@@ -759,7 +760,7 @@ public class Formazioni extends AppCompatActivity {
                                     }
                                     if (percs.size() > 0) {
                                         for (int m = 0; m < nomi.size(); m++) {
-                                            ballot.put(nomi.get(m).text(), percs.get(m));
+                                            ballot.put(nomi.get(m).text().replaceFirst(" ", ""), percs.get(m));
                                         }
                                     }
                                 }
@@ -805,15 +806,15 @@ public class Formazioni extends AppCompatActivity {
 
                         Elements team;
                         if (casa) {
-                            team = matches.get(j).select("div[class=pgroup lf]");
+                            team = matches.get(j).select("div[class=col player-list home]").select("a");
                         } else {
-                            team = matches.get(j).select("div[class=pgroup rt]");
+                            team = matches.get(j).select("div[class=col player-list away]").select("a");
                         }
 
                         int k = 0;
                         found = false;
                         while (!found && k < team.size()) {
-                            if (team.get(k).select("a").text().equals(nome.toUpperCase())) {
+                            if (team.get(k).select("span[class=player-name]").text().equals(nome.toLowerCase())) {
                                 k--;
                                 found = true;
                             }
@@ -821,14 +822,14 @@ public class Formazioni extends AppCompatActivity {
                         }
 
                         if (found) {
-                            Elements perc = team.get(k).select("span[class=perc]");
-                            if (perc.size() == 1) {
+                            Elements perc = team.get(k).select("span[class=player-percentage-value]");
+                            if (k <= 11) {
                                 g.setStringaVoto(perc.get(0).text());
                             } else {
                                 g.setStringaVoto("sub");
-                                Elements ballottaggi = matches.get(j).select("div[class=pgroup]");
+                                Elements ballottaggi = matches.get(j).select("div[class=col box]");
                                 for (int i = 0; i < ballottaggi.size(); i++) {
-                                    if (!ballottaggi.get(i).select("span").get(0).text().equals("BALLOTTAGGI")) {
+                                    if (ballottaggi.get(i).select("span").size() == 0 || !ballottaggi.get(i).select("span").get(0).text().equals("BALLOTTAGGI")) {
                                         ballottaggi.remove(i);
                                         i--;
                                     }
@@ -837,7 +838,7 @@ public class Formazioni extends AppCompatActivity {
                                 HashMap<String, String> ballot = new HashMap<>();
                                 Elements p = ballottaggi.select("p");
                                 for (int i = 0; i < p.size(); i++) {
-                                    Elements nomi = p.get(i).select("span[class=bold]");
+                                    Elements nomi = p.get(i).select("b");
                                     String[] stemp = p.get(i).text().split(" ");
                                     List<String> percs = new ArrayList<>();
                                     for (String s : stemp) {
@@ -847,7 +848,7 @@ public class Formazioni extends AppCompatActivity {
                                     }
                                     if (percs.size() > 0) {
                                         for (int m = 0; m < nomi.size(); m++) {
-                                            ballot.put(nomi.get(m).text(), percs.get(m));
+                                            ballot.put(nomi.get(m).text().replaceFirst(" ", ""), percs.get(m));
                                         }
                                     }
                                 }

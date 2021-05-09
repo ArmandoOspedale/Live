@@ -3,12 +3,14 @@ package com.live;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
-class Ordina extends android.support.v7.widget.AppCompatTextView {
+public class Ordina extends AppCompatTextView {
 
     Context context;
     private boolean enabled = false;

@@ -6,7 +6,7 @@
     <!-- Search Widget -->
     <item
         android:id="@+id/action_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom"
         android:title="@string/cerca"/>

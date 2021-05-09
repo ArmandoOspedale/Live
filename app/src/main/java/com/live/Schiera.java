@@ -14,12 +14,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +37,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -153,8 +154,8 @@ public class Schiera extends AppCompatActivity {
                 typebench = opzioni.getJSONArray("panchinari").join(",").replaceAll("\"", "");
                 orderbench = StringUtil.join(Arrays.asList(opzioni.getString("sequenzaPanchina").split("")), ",");
                 boolean freeBench = StringUtil.isBlank(orderbench);
-                if(!freeBench)
-                    orderbench = orderbench.substring(1, opzioni.getString("sequenzaPanchina").length() * 2);
+                //if(!freeBench)
+                //    orderbench = orderbench.substring(1, opzioni.getString("sequenzaPanchina").length() * 2);
 
                 JSONObject formazione = json.getJSONObject("formazione");
                 modulo = formazione.getString("modulo");
@@ -224,6 +225,7 @@ public class Schiera extends AppCompatActivity {
                 String panchinari = formazione.getString("panchinari").equals("null") ? "" : formazione.getJSONArray("panchinari").toString();
                 return new String[]{titolari, panchinari};
             } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -998,7 +1000,7 @@ public class Schiera extends AppCompatActivity {
             try {
                 Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it/probabili-formazioni-serie-A", "<!-- FINE CONTAINER PRIMO BLOCCO CONTENUTO  SU DUE COLONNE -->");
 
-                Elements el = doc.select("div[id=sqtab]").get(0).children();
+                Elements el = doc.select("div[class=match-list lazy-viewport]").get(0).children();
 
                 if (!Schiera.this.partite) {
                     matches = new String[el.size()][2];
@@ -1041,15 +1043,15 @@ public class Schiera extends AppCompatActivity {
 
                     Elements team;
                     if (casa) {
-                        team = el.get(j).select("div[class=pgroup lf]");
+                        team = el.get(j).select("div[class=col player-list home]").select("a");
                     } else {
-                        team = el.get(j).select("div[class=pgroup rt]");
+                        team = el.get(j).select("div[class=col player-list away]").select("a");
                     }
 
                     int k = 0;
                     found = false;
                     while (!found && k < team.size()) {
-                        if (team.get(k).select("a").text().equals(nome.toUpperCase())) {
+                        if (team.get(k).select("span[class=player-name]").text().equals(nome.toLowerCase())) {
                             k--;
                             found = true;
                         }
@@ -1057,19 +1059,15 @@ public class Schiera extends AppCompatActivity {
                     }
 
                     if (found) {
-                        Elements perc = team.get(k).select("span[class=perc]");
-                        if (perc.size() == 1) {
+                        Elements perc = team.get(k).select("span[class=player-percentage-value]");
+                        if (k < 11) {
                             prob[i] = "I.T. " + perc.get(0).text();
                         } else {
-                            prob[i] = "I.S. ";
-                            if (casa) {
-                                prob[i] = prob[i] + team.get(k).select("div[class=is pull-left bold]").text().replaceAll("I.S. ", "");
-                            } else {
-                                prob[i] = prob[i] + team.get(k).select("div[class=is pull-right bold]").text().replaceAll("I.S. ", "");
-                            }
-                            Elements ballottaggi = el.get(j).select("div[class=pgroup]");
+                            prob[i] = "I.S. " + perc.get(0).text();
+
+                            Elements ballottaggi = el.get(j).select("div[class=col box]");
                             for (int m = 0; m < ballottaggi.size(); m++) {
-                                if (!ballottaggi.get(m).select("span").get(0).text().equals("BALLOTTAGGI")) {
+                                if (ballottaggi.get(m).select("span").size() == 0 || !ballottaggi.get(m).select("span").get(0).text().equals("BALLOTTAGGI")) {
                                     ballottaggi.remove(m);
                                     m--;
                                 }
@@ -1078,7 +1076,7 @@ public class Schiera extends AppCompatActivity {
                             HashMap<String, String> ballot = new HashMap<>();
                             Elements p = ballottaggi.select("p");
                             for (int l = 0; l < p.size(); l++) {
-                                Elements nomi = p.get(l).select("span[class=bold]");
+                                Elements nomi = p.get(l).select("b");
                                 String[] stemp = p.get(l).text().split(" ");
                                 List<String> percs = new ArrayList<>();
                                 for (String s : stemp) {

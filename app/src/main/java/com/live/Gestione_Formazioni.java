@@ -70,6 +70,7 @@ class Gestione_Formazioni extends Dialog {
 
                 return new JSONArray[]{giornate, squadre};
             } catch (IOException | JSONException e) {
+                e.printStackTrace();
                 return null;
             }
         }

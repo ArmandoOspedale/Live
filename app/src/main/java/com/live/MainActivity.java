@@ -31,18 +31,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.TypedValue;
 import android.view.ContextMenu;
@@ -66,7 +54,19 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Assert;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +76,7 @@ import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Assert;
 
 import static android.view.View.GONE;
 
@@ -457,13 +458,9 @@ public class MainActivity extends AppCompatActivity {
                                 home.select("div[class=alert alert-notice no-margin]").select("h3").text().replace("EuroCalendario", "")};
                     }
 
-                    if (home.select("ul[class=widget-body box raised versus]").size() > 1) {
-                        String giornata = home.select("ul[class=widget-body box raised versus]").get(1).parent().select("header[class=widget-header clearfix]").text();
-                        int select = 1;
-                        if(giornata.contains("Ultima Giornata") && home.select("ul[class=widget-body box raised versus]").size() > 2) {
-                            select = 2;
-                        }
-                        table = home.select("ul[class=widget-body box raised versus]").get(select);
+                    if (home.select("ul[class=widget-body box raised versus]").size() > 2 &&
+                            home.select("ul[class=widget-body box raised versus]").get(2).parent().select("header[class=widget-header clearfix]").text().contains("Prossima Giornata")) {
+                        table = home.select("ul[class=widget-body box raised versus]").get(2);
                         match = table.select("li");
                         for(int i = 0; i < match.size(); i++) {
                             if(match.get(i).select("h5[class=team-name").size() == 0) {
@@ -477,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
                                     match.get(i).select("h5[class=team-name").get(1).text();
                         }
                     } else {
-                        String vincitore = home.select("span[class=numbig3][id=team1]").text();
+                        String vincitore = home.select("strong[class=winners]").text();
                         if(StringUtil.isBlank(vincitore)) {
                             prossima = new String[]{"Competizione non ancora iniziata", ""};
                         } else{
@@ -2158,6 +2155,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 selezionaLega(0, 0);
@@ -2260,6 +2258,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         if (intent.getBooleanExtra("live", false)) {
             current = comp.defaultcode;
             new DownloadTask().execute(current);
