@@ -249,13 +249,8 @@ public class ClassificaGiornata extends AppCompatActivity {
             Document doc = HttpRequest.GET_nolega("https://www.fantacalcio.it", "<!-- INIZIO CONTAINER PRIMO BLOCCO CONTENUTO SU DUE COLONNE -->");
 
             if(doc.select("div[class=live-strip]").size() > 0) {
-                Elements live = doc.select("div[class=live-strip]");
-                Elements rows;
-                if(live.size() > 1)
-                    rows = doc.select("div[class=live-strip]").get(1).children();
-                else
-                    rows = doc.select("div[class=live-strip]").get(0).children();
-
+                Elements liveStrip = doc.select("div[class=live-strip]");
+                Elements rows = liveStrip.get(0).children();
                 rows.remove(0);
 
                 for (int i = 0; i < 10; i++) {

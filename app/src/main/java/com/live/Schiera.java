@@ -154,8 +154,8 @@ public class Schiera extends AppCompatActivity {
                 typebench = opzioni.getJSONArray("panchinari").join(",").replaceAll("\"", "");
                 orderbench = StringUtil.join(Arrays.asList(opzioni.getString("sequenzaPanchina").split("")), ",");
                 boolean freeBench = StringUtil.isBlank(orderbench);
-                //if(!freeBench)
-                //    orderbench = orderbench.substring(1, opzioni.getString("sequenzaPanchina").length() * 2);
+                if(!freeBench && orderbench.startsWith(","))
+                    orderbench = orderbench.substring(1, opzioni.getString("sequenzaPanchina").length() * 2);
 
                 JSONObject formazione = json.getJSONObject("formazione");
                 modulo = formazione.getString("modulo");
