@@ -253,10 +253,14 @@ public class MainActivity extends AppCompatActivity {
             if(doc.select("div[class=live-strip]").size() > 0) {
                 Elements liveStrip = doc.select("div[class=live-strip]");
                 Elements rows;
-                if(liveStrip.size() > 1 && !live)
-                    rows = liveStrip.get(1).children();
-                else
+                if(liveStrip.size() > 1) {
+                    if(live && liveStrip.get(1).text().contains("TURNO SUCCESSIVO"))
+                        rows = liveStrip.get(0).children();
+                    else
+                        rows = liveStrip.get(1).children();
+                } else {
                     rows = liveStrip.get(0).children();
+                }
 
                 serieA = rows.select("small").text().split("ª")[0];
                 rows.remove(0);
