@@ -41,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -170,33 +171,36 @@ public class Formazioni extends AppCompatActivity {
                     risultato = new HashMap<>();
                     int i = 0;
                     boolean found = false;
-                    if (tipo == 2 || tipo == 3) {
-                        //if (!current && punteggi == null) {
-                        if (!current) {
-                            punteggi = new ArrayList<>();
-                            HashMap<String, String> header = new HashMap<>();
-                            header.put("squadra", "Classifica di giornata");
-                            punteggi.add(header);
-                            for (int j = 0; j < formazioni.length(); j++) {
-                                JSONObject formazione = formazioni.getJSONObject(j);
+                    if (!current) {
+                        punteggi = new ArrayList<>();
+                        HashMap<String, String> header = new HashMap<>();
+                        header.put("squadra", "Classifica di giornata");
+                        punteggi.add(header);
+                        for (int j = 0; j < formazioni.length(); j++) {
+                            JSONObject formazione = formazioni.getJSONObject(j);
+                            JSONArray jsonSquadre = formazione.getJSONArray("sq");
+                            for (int s = 0; s < jsonSquadre.length(); s++) {
                                 HashMap<String, String> item = new HashMap<>();
-                                item.put("squadra", HttpRequest.getNomeSquadra(formazione.getJSONArray("sq").getJSONObject(0).getString("id"), codici, squadre));
-                                item.put("punti", formazione.getJSONArray("sq").getJSONObject(0).getString("t"));
+                                item.put("squadra", HttpRequest.getNomeSquadra(jsonSquadre.getJSONObject(s).getString("id"), codici, squadre));                                ;
+                                item.put("punti", jsonSquadre.getJSONObject(s).getString("t"));
                                 punteggi.add(item);
                             }
-                            Collections.sort(punteggi, new Comparator<HashMap<String, String>>() {
-                                @Override
-                                public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
-                                    if (o1.get("squadra").equals("Classifica di giornata")) {
-                                        return 1;
-                                    }
-                                    if (o2.get("squadra").equals("Classifica di giornata")) {
-                                        return 0;
-                                    }
-                                    return Double.compare(Double.parseDouble(o2.get("punti")), Double.parseDouble(o1.get("punti")));
-                                }
-                            });
                         }
+                        Collections.sort(punteggi, new Comparator<HashMap<String, String>>() {
+                            @Override
+                            public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
+                                if (o1.get("squadra").equals("Classifica di giornata")) {
+                                    return 1;
+                                }
+                                if (o2.get("squadra").equals("Classifica di giornata")) {
+                                    return 0;
+                                }
+                                return Double.compare(Double.parseDouble(o2.get("punti")), Double.parseDouble(o1.get("punti")));
+                            }
+                        });
+                    }
+                    if (tipo == 2 || tipo == 3) {
+                        //if (!current && punteggi == null) {
                         while (!found && i < formazioni.length()) {
                             JSONObject formazione = formazioni.getJSONObject(i);
                             if (tipo == 2) {
@@ -216,7 +220,6 @@ public class Formazioni extends AppCompatActivity {
                                 }
                             }
                             i++;
-
                         }
                         if (found) {
                             i--;
@@ -949,6 +952,14 @@ public class Formazioni extends AppCompatActivity {
                 Toast.makeText(Formazioni.this, "Opzione valida solo per la giornata in corso", Toast.LENGTH_SHORT).show();
             }
             return true;
+        }
+
+        if(id == R.id.action_top) {
+            String message = "Opzione non valida per la giornata in corso";
+            if(punteggi != null) {
+                message = punteggi.get(1).get("squadra") + ": " + punteggi.get(1).get("punti");
+            }
+            Toast.makeText(Formazioni.this, message, Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
