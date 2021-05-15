@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -91,13 +89,10 @@ class Annulla extends Dialog {
                 ListView nonlist = new ListView(context);
                 ArrayAdapter<String> nonad = new ArrayAdapter<>(context, R.layout.row, R.id.row, calcolate);
                 nonlist.setAdapter(nonad);
-                nonlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        String calcolata = calcolate[i];
+                nonlist.setOnItemClickListener((adapterView, view, i, l) -> {
+                    String calcolata = calcolate[i];
 
-                        new Post().execute(calcolata);
-                    }
+                    new Post().execute(calcolata);
                 });
                 setContentView(nonlist);
                 show();

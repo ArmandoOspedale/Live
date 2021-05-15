@@ -33,7 +33,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:gravity="center"
-            android:id="@+id/icona_casa"/>
+            android:id="@+id/icona_casa"
+            android:contentDescription="@string/content_descr" />
 
         <TextView
             android:layout_width="0dp"
@@ -49,7 +50,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:gravity="center"
-            android:id="@+id/icona_trasf"/>
+            android:id="@+id/icona_trasf"
+            android:contentDescription="@string/content_descr" />
 
         <TextView
             android:layout_width="0dp"

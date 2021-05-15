@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,8 +25,8 @@ import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Classifica extends AppCompatActivity {
 
@@ -181,12 +182,7 @@ public class Classifica extends AppCompatActivity {
             list.setSelector(new StateListDrawable());
             if (tipo == 1) {
                 txt.setText(R.string.view_prob_class);
-                txt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new SculoClass().execute(comp);
-                    }
-                });
+                txt.setOnClickListener(view -> new SculoClass().execute(comp));
                 if (list.getFooterViewsCount() == 0) list.addFooterView(txt);
             }
 
@@ -325,12 +321,9 @@ public class Classifica extends AppCompatActivity {
                     feedList.add(map);
                 }
 
-                Collections.sort(feedList, new Comparator<HashMap<String, String>>() {
-                    @Override
-                    public int compare(HashMap<String, String> t1, HashMap<String, String> t2) {
-                        return Double.compare(Double.parseDouble(t2.get("NotRounded")), Double.parseDouble(t1.get("NotRounded")));
-                    }
-                });
+                Collections.sort(feedList, (t1, t2) -> Double.compare(
+                        Double.parseDouble(Objects.requireNonNull(t2.get("NotRounded"))),
+                        Double.parseDouble(Objects.requireNonNull(t1.get("NotRounded")))));
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -358,12 +351,7 @@ public class Classifica extends AppCompatActivity {
             ListView list = findViewById(R.id.listView);
             list.setSelector(new StateListDrawable());
             txt.setText(R.string.norm_class);
-            txt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new DownloadClass().execute(comp);
-                }
-            });
+            txt.setOnClickListener(view -> new DownloadClass().execute(comp));
 
             SimpleAdapter simpleAdapter = new SimpleAdapter(Classifica.this, sculo, R.layout.classlist, new String[]{"NomeSquadra", "Pv", "Pp", "Diff"}, new int[]{R.id.NomeSquadra, R.id.Giocate, R.id.Punti, R.id.Totale});
             list.setAdapter(simpleAdapter);
@@ -371,7 +359,7 @@ public class Classifica extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE && tipo != 2 && tipo != 3) {
@@ -394,12 +382,7 @@ public class Classifica extends AppCompatActivity {
             list.setSelector(new StateListDrawable());
             if (tipo == 1) {
                 txt.setText(R.string.prob_class);
-                txt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new SculoClass().execute(comp);
-                    }
-                });
+                txt.setOnClickListener(view -> new SculoClass().execute(comp));
                 if (list.getFooterViewsCount() == 0) list.addFooterView(txt);
             }
 

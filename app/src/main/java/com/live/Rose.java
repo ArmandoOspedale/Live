@@ -8,8 +8,6 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,13 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Rose extends AppCompatActivity {
 
@@ -78,25 +79,20 @@ public class Rose extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, squadre);
         list.setAdapter(adapter2);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i != 0) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                    new Download().execute(codici[i]);
-                //}
-            }
+        list.setOnItemClickListener((adapterView, view, i, l) -> {
+            //if (i != 0) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(View.GONE);
+                new Download().execute(codici[i]);
+            //}
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (list.getVisibility() == View.VISIBLE) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                } else {
-                    fab.animate().rotationBy(-90).setDuration(150);
-                    list.setVisibility(View.VISIBLE);
-                }
+        fab.setOnClickListener(v -> {
+            if (list.getVisibility() == View.VISIBLE) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(View.GONE);
+            } else {
+                fab.animate().rotationBy(-90).setDuration(150);
+                list.setVisibility(View.VISIBLE);
             }
         });
 
@@ -186,14 +182,14 @@ public class Rose extends AppCompatActivity {
 
             int costo = 0;
             for (HashMap<String, String> g : giocatori) {
-                costo = costo + Integer.parseInt(g.get("Costo"));
+                costo = costo + Integer.parseInt(Objects.requireNonNull(g.get("Costo")));
             }
             String temp = "Crediti spesi: " + costo;
             text1.setText(temp);
 
             int quot = 0;
             for (HashMap<String, String> g : giocatori) {
-                quot = quot + Integer.parseInt(g.get("Quot"));
+                quot = quot + Integer.parseInt(Objects.requireNonNull(g.get("Quot")));
             }
             temp = "Valore rosa: " + quot;
             text2.setText(temp);
@@ -265,10 +261,10 @@ public class Rose extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_form, menu);
-        menu.findItem(R.id.action_perc).setVisible(true);
-        menu.findItem(R.id.action_perc).setEnabled(false);
-        menu.findItem(R.id.action_perc).setTitle("CREDITI: " + crediti_squadra);
+        getMenuInflater().inflate(R.menu.menu_rose, menu);
+        menu.findItem(R.id.action_crediti).setVisible(true);
+        menu.findItem(R.id.action_crediti).setEnabled(false);
+        menu.findItem(R.id.action_crediti).setTitle("CREDITI: " + crediti_squadra);
 
         return true;
     }

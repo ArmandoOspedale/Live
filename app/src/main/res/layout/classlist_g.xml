@@ -13,7 +13,7 @@
         android:id="@+id/NomeSquadra"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:textColor="#444444"/>
 
     <TextView
@@ -36,6 +36,6 @@
         android:textColor="#1274AF"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginEnd="16dp"/>
 
 </LinearLayout>

@@ -14,7 +14,7 @@
         android:textColor="#1274AF"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginStart="8dp"/>
 
     <ImageView
         android:layout_width="0dp"
@@ -23,7 +23,8 @@
         android:gravity="center"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:id="@+id/icona"/>
+        android:id="@+id/icona"
+        android:contentDescription="@string/content_descr" />
 
     <TextView
         android:layout_width="0dp"
@@ -34,7 +35,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textColor="#444444"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginStart="8dp"/>
 
     <TextView
         android:layout_width="0dp"

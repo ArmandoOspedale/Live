@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/MV"
-            android:text="MV"
+            android:text="@string/mv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"
@@ -57,7 +57,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:text="Pres"
+            android:text="@string/pres"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"
@@ -68,7 +68,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:text="Gf/Gs"
+            android:text="@string/gf_gs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"
@@ -79,7 +79,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:text="Am"
+            android:text="@string/am"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"
@@ -90,7 +90,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:text="Esp"
+            android:text="@string/esp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"
@@ -101,7 +101,7 @@
             android:gravity="end"/>
 
         <TextView
-            android:text="Ass"
+            android:text="@string/ass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="3dip"

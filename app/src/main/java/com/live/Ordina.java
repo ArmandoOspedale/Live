@@ -3,12 +3,11 @@ package com.live;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.LinearLayout;
 
 public class Ordina extends AppCompatTextView {
 
@@ -38,40 +37,40 @@ public class Ordina extends AppCompatTextView {
         int height = 15 * (int) context.getResources().getDisplayMetrics().density;
         int width = 10 * (int) context.getResources().getDisplayMetrics().density;
         disabilitato = ContextCompat.getDrawable(context, R.drawable.disabilitato);
-        disabilitato.setBounds(0, 0, width, height);
+        if(disabilitato != null)
+            disabilitato.setBounds(0, 0, width, height);
 
         up = ContextCompat.getDrawable(context, R.drawable.up);
-        up.setBounds(0, 0, width, height);
+        if(up != null)
+            up.setBounds(0, 0, width, height);
 
         down = ContextCompat.getDrawable(context, R.drawable.down);
-        down.setBounds(0, 0, width, height);
+        if(down != null)
+            down.setBounds(0, 0, width, height);
 
         setCompoundDrawables(null, null, disabilitato, null);
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (enabled) {
-                    if (verso) {
-                        verso = false;
-                        setCompoundDrawables(null, null, up, null);
-                    } else {
-                        verso = true;
-                        setCompoundDrawables(null, null, down, null);
-                    }
+        setOnClickListener(view -> {
+            if (enabled) {
+                if (verso) {
+                    verso = false;
+                    setCompoundDrawables(null, null, up, null);
                 } else {
-                    LinearLayout l = ((LinearLayout) view.getParent());
-                    for (int i = 1; i < l.getChildCount(); i++) {
-                        if (((Ordina) l.getChildAt(i)).getStato()) {
-                            ((Ordina) l.getChildAt(i)).disabilita();
-                        }
-                    }
-
-                    enabled = true;
                     verso = true;
                     setCompoundDrawables(null, null, down, null);
                 }
-                adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
+            } else {
+                LinearLayout l = ((LinearLayout) view.getParent());
+                for (int i = 1; i < l.getChildCount(); i++) {
+                    if (((Ordina) l.getChildAt(i)).getStato()) {
+                        ((Ordina) l.getChildAt(i)).disabilita();
+                    }
+                }
+
+                enabled = true;
+                verso = true;
+                setCompoundDrawables(null, null, down, null);
             }
+            adapter.sort(campi[((LinearLayout) view.getParent()).indexOfChild(view)], verso);
         });
     }
 

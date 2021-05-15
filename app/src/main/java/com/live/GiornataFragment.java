@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar;
 
@@ -27,10 +29,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class GiornataFragment extends Fragment {
@@ -40,7 +42,8 @@ public class GiornataFragment extends Fragment {
     private GoogleProgressBar gpb;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        assert getArguments() != null;
         String[] giornata = getArguments().getStringArray("giornata");
         position = getArguments().getInt("position");
 
@@ -49,7 +52,7 @@ public class GiornataFragment extends Fragment {
         gpb = new GoogleProgressBar(getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER_HORIZONTAL;
-        params.topMargin = 10 * (int)getActivity().getResources().getDisplayMetrics().density;
+        params.topMargin = 10 * (int) Objects.requireNonNull(getActivity()).getResources().getDisplayMetrics().density;
         params.bottomMargin = 10 * (int)getActivity().getResources().getDisplayMetrics().density;
         l.addView(gpb, params);
 
@@ -64,11 +67,11 @@ public class GiornataFragment extends Fragment {
                 HashMap<String, String> map = new HashMap<>();
                 StringTokenizer st = new StringTokenizer(g, "<_>");
                 map.put("casa", st.nextToken());
-                if (map.get("casa").equals("Chievoverona")) {
+                if (Objects.equals(map.get("casa"), "Chievoverona")) {
                     map.put("casa", "Chievo");
                 }
                 map.put("trasf", st.nextToken());
-                if (map.get("trasf").equals("Chievoverona")) {
+                if (Objects.equals(map.get("trasf"), "Chievoverona")) {
                     map.put("trasf", "Chievo");
                 }
                 map.put("risultato", st.nextToken());
@@ -81,15 +84,13 @@ public class GiornataFragment extends Fragment {
                 partite.add(map);
             }
 
-            Collections.sort(partite, new Comparator<HashMap<String, String>>() {
-                @Override
-                public int compare(HashMap<String, String> p1, HashMap<String, String> p2) {
-                    DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.ITALIAN);
-                    try {
-                        return format.parse(p1.get("data")).compareTo(format.parse(p2.get("data")));
-                    } catch (ParseException e) {
-                        return 0;
-                    }
+            Collections.sort(partite, (p1, p2) -> {
+                DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.ITALIAN);
+                try {
+                    return Objects.requireNonNull(format.parse(Objects.requireNonNull(p1.get("data"))))
+                            .compareTo(format.parse(Objects.requireNonNull(p2.get("data"))));
+                } catch (ParseException e) {
+                    return 0;
                 }
             });
 
@@ -122,7 +123,7 @@ public class GiornataFragment extends Fragment {
             View v = super.getView(position, convertView, parent);
 
             ImageView im = v.findViewById(R.id.icona_casa);
-            im.setImageResource(getDrawable(getContext(), squadre[position].split("<>")[0].toLowerCase().replaceAll(" ", "_")));
+            im.setImageResource(getDrawable(Objects.requireNonNull(getContext()), squadre[position].split("<>")[0].toLowerCase().replaceAll(" ", "_")));
 
             im = v.findViewById(R.id.icona_trasf);
             im.setImageResource(getDrawable(getContext(), squadre[position].split("<>")[1].toLowerCase().replaceAll(" ", "_")));
@@ -196,11 +197,11 @@ public class GiornataFragment extends Fragment {
                     HashMap<String, String> map = new HashMap<>();
                     StringTokenizer st = new StringTokenizer(g, "<_>");
                     map.put("casa", st.nextToken());
-                    if (map.get("casa").equals("Chievoverona")) {
+                    if (Objects.equals(map.get("casa"), "Chievoverona")) {
                         map.put("casa", "Chievo");
                     }
                     map.put("trasf", st.nextToken());
-                    if (map.get("trasf").equals("Chievoverona")) {
+                    if (Objects.equals(map.get("trasf"), "Chievoverona")) {
                         map.put("trasf", "Chievo");
                     }
                     map.put("risultato", st.nextToken());
@@ -213,15 +214,13 @@ public class GiornataFragment extends Fragment {
                     partite.add(map);
                 }
 
-                Collections.sort(partite, new Comparator<HashMap<String, String>>() {
-                    @Override
-                    public int compare(HashMap<String, String> p1, HashMap<String, String> p2) {
-                        DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.ITALIAN);
-                        try {
-                            return format.parse(p1.get("data")).compareTo(format.parse(p2.get("data")));
-                        } catch (ParseException e) {
-                            return 0;
-                        }
+                Collections.sort(partite, (p1, p2) -> {
+                    DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.ITALIAN);
+                    try {
+                        return Objects.requireNonNull(format.parse(Objects.requireNonNull(p1.get("data"))))
+                                .compareTo(format.parse(Objects.requireNonNull(p2.get("data"))));
+                    } catch (ParseException e) {
+                        return 0;
                     }
                 });
 

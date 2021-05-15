@@ -19,7 +19,7 @@
             android:textSize="20sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:text="@string/squadra"/>
@@ -58,7 +58,7 @@
             android:textStyle="bold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/totale"/>
     </LinearLayout>
 
@@ -78,7 +78,7 @@
             android:textSize="20sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:text="@string/squadra"/>
@@ -117,7 +117,7 @@
             android:textStyle="bold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/diff"/>
     </LinearLayout>
 
@@ -138,7 +138,7 @@
             android:textStyle="bold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:text="@string/squadra"/>
 
         <TextView
@@ -235,7 +235,7 @@
             android:textStyle="bold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/totale"/>
 
     </LinearLayout>
@@ -254,5 +254,5 @@
         android:layout_marginTop="25dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:text="Calcolo..."/>
+        android:text="@string/calcolo"/>
 </LinearLayout>

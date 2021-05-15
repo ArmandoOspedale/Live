@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.Gravity;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class PartitaLive_Fragment extends Fragment {
 
@@ -45,7 +48,8 @@ public class PartitaLive_Fragment extends Fragment {
     String giornata;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        assert getArguments() != null;
         final int position = getArguments().getInt("position");
         partita = getArguments().getString("partita");
         idA = getArguments().getInt("teamA");
@@ -60,12 +64,9 @@ public class PartitaLive_Fragment extends Fragment {
                 srl = rootView.findViewById(R.id.srl);
                 srl.setColorSchemeColors(Color.rgb(18, 116, 175));
 
-                srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        srl.setRefreshing(true);
-                        new Partita().execute(position);
-                    }
+                srl.setOnRefreshListener(() -> {
+                    srl.setRefreshing(true);
+                    new Partita().execute(position);
                 });
 
                 listA = rootView.findViewById(R.id.listA);
@@ -98,7 +99,7 @@ public class PartitaLive_Fragment extends Fragment {
                 new Partita().execute(position);
                 return rootView;
             case 1:
-                srl = new SwipeRefreshLayout(getActivity());
+                srl = new SwipeRefreshLayout(Objects.requireNonNull(getActivity()));
 
                 eventi = new ListView(getActivity());
                 eventi.setSelector(android.R.color.transparent);
@@ -106,30 +107,24 @@ public class PartitaLive_Fragment extends Fragment {
                 srl.addView(eventi);
                 srl.setColorSchemeColors(Color.rgb(18, 116, 175));
 
-                srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        srl.setRefreshing(true);
-                        new Partita().execute(position);
-                    }
+                srl.setOnRefreshListener(() -> {
+                    srl.setRefreshing(true);
+                    new Partita().execute(position);
                 });
 
                 new Partita().execute(position);
                 return srl;
             case 2:
-                srl = new SwipeRefreshLayout(getActivity());
+                srl = new SwipeRefreshLayout(Objects.requireNonNull(getActivity()));
 
                 webview = new WebView(getActivity());
 
                 srl.addView(webview);
                 srl.setColorSchemeColors(Color.rgb(18, 116, 175));
 
-                srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        srl.setRefreshing(true);
-                        new Partita().execute(position);
-                    }
+                srl.setOnRefreshListener(() -> {
+                    srl.setRefreshing(true);
+                    new Partita().execute(position);
                 });
 
                 new Partita().execute(position);
@@ -172,7 +167,7 @@ public class PartitaLive_Fragment extends Fragment {
             }
             builder.append("</table");
 
-            ((TextView) getActivity().findViewById(R.id.result)).setText(doc.select("td[style=width: 25%; text-align: center; font-size:180%; font-weight: bold; color: #086203;]").text());
+            ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.result)).setText(doc.select("td[style=width: 25%; text-align: center; font-size:180%; font-weight: bold; color: #086203;]").text());
 
             Element temp = doc.select("td[style=text-align: center; font-weight:bold;]").get(0);
             String tempo;
@@ -235,7 +230,7 @@ public class PartitaLive_Fragment extends Fragment {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("minuto", valori.getString(0));
                     map.put("tempo", valori.getString(6));
-                    if (!info.get("tempo").equals(valori.getString(6))) {
+                    if (!Objects.equals(info.get("tempo"), valori.getString(6))) {
                         info = new HashMap<>();
                         info.put("info", "tempo");
                         info.put("tempo", valori.getString(6));
@@ -246,7 +241,7 @@ public class PartitaLive_Fragment extends Fragment {
                     map.put("bonus", valori.getString(2));
                     map.put("nome", valori.getString(4));
                     events.add(map);
-                    if (!info.get("punteggio").equals(valori.getString(3))) {
+                    if (!Objects.equals(info.get("punteggio"), valori.getString(3))) {
                         info = new HashMap<>();
                         info.put("info", "punteggio");
                         info.put("tempo", valori.getString(6));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -16,14 +17,15 @@
             android:layout_height="match_parent"
             android:id="@+id/spinner"
             android:layout_weight="36"
-            android:paddingRight="8dp"/>
+            android:paddingEnd="8dp"
+            tools:ignore="RtlSymmetry" />
 
         <com.live.Ordina
             android:layout_width="0dp"
             android:layout_weight="8"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="Pg"
+            android:text="@string/pg"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:gravity="center"
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="19sp"
             android:id="@+id/enabled"
-            android:text="Mv"
+            android:text="@string/mv"
             android:layout_weight="12"
             android:gravity="center"
             android:textColor="#FFFFFF"
@@ -45,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="Mf"
+            android:text="@string/mf"
             android:layout_weight="12"
             android:gravity="center"
             android:textColor="#FFFFFF"
@@ -56,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="G"
+            android:text="@string/g"
             android:layout_weight="8"
             android:gravity="center"
             android:textColor="#FFFFFF"
@@ -67,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="As"
+            android:text="@string/as"
             android:layout_weight="8"
             android:gravity="center"
             android:textColor="#FFFFFF"
@@ -78,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="Am"
+            android:text="@string/am"
             android:layout_weight="8"
             android:gravity="center"
             android:textColor="#FFFFFF"
@@ -89,13 +91,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="19sp"
-            android:text="Es"
+            android:text="@string/es"
             android:layout_weight="8"
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:paddingRight="8dp"/>
+            android:paddingEnd="8dp"
+            tools:ignore="RtlSymmetry" />
     </LinearLayout>
 
     <ListView

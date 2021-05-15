@@ -9,6 +9,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import org.jsoup.helper.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,12 +87,12 @@ class Filter_Adapter extends BaseAdapter implements Filterable {
             for (int i = 0; i < count; i++) {
                 if (filterString.equals("")) {
                     filterableString = originalData.get(i).get("Squadra");
-                    if (filterableString.startsWith(squadra)) {
+                    if (!StringUtil.isBlank(filterableString) && filterableString.startsWith(squadra)) {
                         nlist.add(originalData.get(i));
                     }
                 } else {
                     filterableString = originalData.get(i).get("Nome");
-                    if (filterableString.toLowerCase().startsWith(filterString)) {
+                    if (!StringUtil.isBlank(filterableString) && filterableString.toLowerCase().startsWith(filterString)) {
                         nlist.add(originalData.get(i));
                     }
                 }

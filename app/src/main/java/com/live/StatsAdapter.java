@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 class StatsAdapter extends BaseAdapter implements Filterable {
 
@@ -86,13 +87,9 @@ class StatsAdapter extends BaseAdapter implements Filterable {
     }
 
     void sort (final String campo, final boolean verso) {
-        Collections.sort(filteredData, new Comparator<HashMap<String, String>>() {
-            @Override
-            public int compare(HashMap<String, String> t1, HashMap<String, String> t2) {
-                return verso ? Double.compare(Double.parseDouble(t2.get(campo)), Double.parseDouble(t1.get(campo)))
-                        : Double.compare(Double.parseDouble(t1.get(campo)), Double.parseDouble(t2.get(campo)));
-            }
-        });
+        Collections.sort(filteredData, (t1, t2) -> verso ? Double.compare(
+                Double.parseDouble(Objects.requireNonNull(t2.get(campo))), Double.parseDouble(Objects.requireNonNull(t1.get(campo))))
+                : Double.compare(Double.parseDouble(Objects.requireNonNull(t1.get(campo))), Double.parseDouble(Objects.requireNonNull(t2.get(campo)))));
         notifyDataSetChanged();
     }
 
@@ -116,7 +113,7 @@ class StatsAdapter extends BaseAdapter implements Filterable {
             String filterableString;
 
             for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).get("Calciatore").split(" \\(")[0];
+                filterableString = Objects.requireNonNull(list.get(i).get("Calciatore")).split(" \\(")[0];
                 if (filterableString.toLowerCase().contains(filterString)) {
                     nlist.add(originalData.get(i));
                 }

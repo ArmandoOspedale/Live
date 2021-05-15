@@ -20,8 +20,11 @@
     <string name="log">Login</string>
     <string name="calcola">CALCOLA GIORNATA</string>
     <string name="annulla">ANNULLA CALCOLO</string>
-    <string name="perc_tit">PERC. TITOLARITA\'</string>
+    <string name="perc_tit">PERCENTUALE TITOLARITA\'</string>
     <string name="top_giornata">TOP GIORNATA</string>
+    <string name="crediti">CREDITI</string>
+    <string name="noform">NESSUNA FORMAZIONE TROVATA PER LA COMPETIZIONE SELEZIONATA</string>
+    <string name="content_descr">Content description</string>
     <string name="info">Info</string>
     <string name="sel_modulo">Seleziona modulo:</string>
     <string name="conf_formazione">SCHIERA</string>
@@ -94,6 +97,20 @@
     <string name="mod">Modificatore difesa:</string>
     <string name="crash_toast_text">OPS</string>
     <string name="cerca">Cerca</string>
+    <string name="calcolo">Calcolo…</string>
+    <string name="r">R</string>
+    <string name="nome">NOME</string>
+    <string name="mv">MV</string>
+    <string name="pres">Pres</string>
+    <string name="gf_gs">Gf/Gs</string>
+    <string name="am">Am</string>
+    <string name="esp">Esp</string>
+    <string name="ass">Ass</string>
+    <string name="pg">Pg</string>
+    <string name="mf">Mf</string>
+    <string name="g">G</string>
+    <string name="as">As</string>
+    <string name="es">Es</string>
     <array name="FG">
         <item>1</item>
         <item>24</item>

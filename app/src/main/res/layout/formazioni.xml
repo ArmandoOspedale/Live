@@ -21,11 +21,10 @@
         app:backgroundTint="#1274AF"
         android:layout_marginTop="@dimen/button_inset_vertical_material"
         android:layout_marginBottom="@dimen/button_inset_vertical_material"
-        android:layout_marginRight="@dimen/button_inset_horizontal_material"
         android:layout_marginEnd="@dimen/button_inset_horizontal_material"
-        android:layout_marginLeft="11dp"
         android:layout_marginStart="11dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/content_descr" />
     <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,7 +95,6 @@
         android:layout_height="wrap_content"
         android:background="@android:drawable/dialog_holo_light_frame"
         android:layout_marginTop="52dp"
-        android:layout_marginLeft="@dimen/button_inset_horizontal_material"
         android:layout_marginStart="@dimen/button_inset_horizontal_material"
         android:visibility="gone">
     </ListView>

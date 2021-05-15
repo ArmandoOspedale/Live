@@ -1,5 +1,6 @@
 package com.live;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,23 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class MyFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFcmListenerService";
     private final static String GROUP_KEY_UPS = "group_key_ups";
 
     // [START receive_message]
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onMessageReceived(RemoteMessage message) {
         String from = message.getFrom();
         Map<String, String> data = message.getData();
         Log.d(TAG, "From: " + from);
 
-        if (from.startsWith("/topics/")) {
+        //if (from.startsWith("/topics/")) {
             // message received from some topic.
-        } else {
+        //} else {
             // normal downstream message.
-        }
+        //}
 
         if (data.containsKey("giornatacalcolata")) {
             sendNotification(data.get("giornatacalcolata"));
@@ -78,7 +81,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                         }
                         messages.add(portiere);
                         messages.add("Risultato: " + data.get("risultato"));
-                        sendNotification("AGGIORNAMENTO GENERALE", messages);
+                        sendNotification(messages);
                     case R.id.miapartita:
                         /*if (sharedPreferences.getBoolean("avv", false)) {
                             messages = new ArrayList<>();
@@ -124,7 +127,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
      *
      *
      */
-    private void sendNotification(String header, List<String> messages) {
+    private void sendNotification(List<String> messages) {
         int requestCode = (int) System.currentTimeMillis();
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -158,7 +161,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 }
             }
         }
-        style.setBigContentTitle(header).setSummaryText(messages.get(messages.size()-1));
+        style.setBigContentTitle("AGGIORNAMENTO GENERALE").setSummaryText(messages.get(messages.size()-1));
         notificationBuilder
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

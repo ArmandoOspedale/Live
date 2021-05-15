@@ -29,7 +29,8 @@
         android:layout_marginTop="10dip"
         android:layout_marginLeft="10dip"
         android:minWidth="200dp"
-        android:hint="@string/log_lega"/>
+        android:hint="@string/log_lega"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/tv_pw"
@@ -52,7 +53,8 @@
         android:layout_marginTop="10dip"
         android:layout_marginLeft="10dip"
         android:minWidth="200dp"
-        android:hint="@string/log_squadra"/>
+        android:hint="@string/log_squadra"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/btn_login"

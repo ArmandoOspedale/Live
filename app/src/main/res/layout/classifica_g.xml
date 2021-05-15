@@ -24,7 +24,7 @@
                 android:textSize="20sp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:text="@string/squadra"/>
@@ -50,7 +50,7 @@
                 android:textStyle="bold"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/punteggio"/>
         </LinearLayout>
 

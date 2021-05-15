@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ListaSvincolati extends AppCompatActivity {
 
@@ -103,12 +106,7 @@ public class ListaSvincolati extends AppCompatActivity {
                 final TabLayout tabLayout = findViewById(R.id.sliding_tabs);
                 tabLayout.setBackgroundColor(Color.rgb(1, 174, 240));
                 tabLayout.setTabTextColors(Color.argb(138,255,255,255), Color.argb(222,255,255,255));
-                tabLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tabLayout.setupWithViewPager(viewPager);
-                    }
-                });
+                tabLayout.post(() -> tabLayout.setupWithViewPager(viewPager));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -128,6 +126,7 @@ public class ListaSvincolati extends AppCompatActivity {
             return PAGE_COUNT;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             SvincolatiFragment fragment = new SvincolatiFragment();
@@ -157,7 +156,7 @@ public class ListaSvincolati extends AppCompatActivity {
         }
 
         @Override
-        public int getItemPosition(Object object) {
+        public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE;
         }
     }
@@ -183,7 +182,7 @@ public class ListaSvincolati extends AppCompatActivity {
             Collections.sort(dif, Nome);
             Collections.sort(cen, Nome);
             Collections.sort(att, Nome);
-            viewPager.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
         }
 
         if (id == R.id.action_squadra) {
@@ -191,7 +190,7 @@ public class ListaSvincolati extends AppCompatActivity {
             Collections.sort(dif, Squadra);
             Collections.sort(cen, Squadra);
             Collections.sort(att, Squadra);
-            viewPager.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
         }
 
         if (id == R.id.action_quot) {
@@ -199,45 +198,36 @@ public class ListaSvincolati extends AppCompatActivity {
             Collections.sort(dif, Quotazione);
             Collections.sort(cen, Quotazione);
             Collections.sort(att, Quotazione);
-            viewPager.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     public static Comparator<String[]> Nome
-            = new Comparator<String[]>() {
+            = (g1, g2) -> {
 
-        public int compare(String[] g1, String[] g2) {
+                String nome1 = g1[1];
+                String nome2 = g2[1];
 
-            String nome1 = g1[1];
-            String nome2 = g2[1];
-
-            return nome1.compareTo(nome2);
-        }
-    };
+                return nome1.compareTo(nome2);
+            };
 
     private static final Comparator<String[]> Squadra
-            = new Comparator<String[]>() {
+            = (g1, g2) -> {
 
-        public int compare(String[] g1, String[] g2) {
+                String squadra1 = g1[2];
+                String squadra2 = g2[2];
 
-            String squadra1 = g1[2];
-            String squadra2 = g2[2];
-
-            return squadra1.compareTo(squadra2);
-        }
-    };
+                return squadra1.compareTo(squadra2);
+            };
 
     private static final Comparator<String[]> Quotazione
-            = new Comparator<String[]>() {
+            = (g1, g2) -> {
 
-        public int compare(String[] g1, String[] g2) {
+                double quot1 = Double.parseDouble(g1[4]);
+                double quot2 = Double.parseDouble(g2[4]);
 
-            double quot1 = Double.parseDouble(g1[4]);
-            double quot2 = Double.parseDouble(g2[4]);
-
-            return (int)(quot2 - quot1);
-        }
-    };
+                return (int)(quot2 - quot1);
+            };
 }

@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -94,30 +92,24 @@ class Gestione_Formazioni extends Dialog {
                     }
                     ArrayAdapter<String> nonad = new ArrayAdapter<>(context, R.layout.row, R.id.row, squadre);
                     nonlist.setAdapter(nonad);
-                    nonlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                            ListView list = new ListView(context);
+                    nonlist.setOnItemClickListener((adapterView, view, position, l) -> {
+                        ListView list = new ListView(context);
 
-                            ArrayAdapter<String> ad = new ArrayAdapter<>(context, R.layout.row, R.id.row, giornate);
-                            list.setAdapter(ad);
+                        ArrayAdapter<String> ad = new ArrayAdapter<>(context, R.layout.row, R.id.row, giornate);
+                        list.setAdapter(ad);
 
-                            setTitle("Seleziona giornata");
-                            setContentView(list);
+                        setTitle("Seleziona giornata");
+                        setContentView(list);
 
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Intent intent = new Intent(context, Schiera.class);
-                                    intent.putExtra("comp", comp);
-                                    intent.putExtra("teamId", codici[position]);
-                                    intent.putExtra("giornata", Integer.parseInt(giornate[i]));
-                                    intent.putExtra("admin", 1);
-                                    context.startActivity(intent);
-                                    dismiss();
-                                }
-                            });
-                        }
+                        list.setOnItemClickListener((adapterView1, view1, i, l1) -> {
+                            Intent intent = new Intent(context, Schiera.class);
+                            intent.putExtra("comp", comp);
+                            intent.putExtra("teamId", codici[position]);
+                            intent.putExtra("giornata", Integer.parseInt(giornate[i]));
+                            intent.putExtra("admin", 1);
+                            context.startActivity(intent);
+                            dismiss();
+                        });
                     });
 
                     setContentView(nonlist);

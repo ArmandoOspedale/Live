@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -140,12 +142,7 @@ public class PartitaLive extends AppCompatActivity {
             final TabLayout tabLayout = findViewById(R.id.sliding_tabs);
             tabLayout.setBackgroundColor(Color.rgb(1, 174, 240));
             tabLayout.setTabTextColors(Color.argb(138, 255, 255, 255), Color.argb(222, 255, 255, 255));
-            tabLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    tabLayout.setupWithViewPager(viewPager);
-                }
-            });
+            tabLayout.post(() -> tabLayout.setupWithViewPager(viewPager));
         }
     }
 
@@ -160,6 +157,7 @@ public class PartitaLive extends AppCompatActivity {
             return 3;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             PartitaLive_Fragment fragment = new PartitaLive_Fragment();

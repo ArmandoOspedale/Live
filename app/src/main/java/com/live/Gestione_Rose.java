@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Gestione_Rose extends AppCompatActivity {
 
@@ -92,26 +93,21 @@ public class Gestione_Rose extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, squadre);
         list.setAdapter(adapter2);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i != 0) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                    current = codici[i];
-                    new Download().execute(codici[i]);
-                //}
-            }
+        list.setOnItemClickListener((adapterView, view, i, l) -> {
+            //if (i != 0) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(View.GONE);
+                current = codici[i];
+                new Download().execute(codici[i]);
+            //}
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (list.getVisibility() == View.VISIBLE) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                } else {
-                    fab.animate().rotationBy(-90).setDuration(150);
-                    list.setVisibility(View.VISIBLE);
-                }
+        fab.setOnClickListener(v -> {
+            if (list.getVisibility() == View.VISIBLE) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(View.GONE);
+            } else {
+                fab.animate().rotationBy(-90).setDuration(150);
+                list.setVisibility(View.VISIBLE);
             }
         });
 
@@ -159,7 +155,7 @@ public class Gestione_Rose extends AppCompatActivity {
                             giocatore.put("Ruolo", in_roles.getJSONObject(j).getString("r"));
                             giocatore.put("Squadra", in_roles.getJSONObject(j).getString("s").toUpperCase().substring(0, 3));
                             giocatore.put("Costo", in_roles.getJSONObject(j).getString("cacq"));
-                            pagato = pagato + Integer.parseInt(giocatore.get("Costo"));
+                            pagato = pagato + Integer.parseInt(Objects.requireNonNull(giocatore.get("Costo")));
                             giocatore.put("Codice", in_roles.getJSONObject(j).getString("id"));
                         } else {
                             giocatore.put("Nome", "");
@@ -196,6 +192,7 @@ public class Gestione_Rose extends AppCompatActivity {
             }
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         protected void onPostExecute(Void aVoid) {
             ((TextView) findViewById(R.id.squadra)).setText(squadra.toUpperCase());
@@ -203,51 +200,44 @@ public class Gestione_Rose extends AppCompatActivity {
             ListView list = findViewById(R.id.lista);
             adapter = new mAdapter(Gestione_Rose.this, giocatori);
             list.setAdapter(adapter);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                    if (giocatori.get(position).get("Nome").equals("")) {
-                        new Lista().execute(giocatori.get(position).get("Ruolo"), String.valueOf(position));
-                    } else {
-                        final Dialog d = new Dialog(Gestione_Rose.this, R.style.CustomDialog);
-                        d.setTitle(giocatori.get(position).get("Nome") + " (" + giocatori.get(position).get("Costo") + ")");
-                        d.setContentView(R.layout.svincola);
-                        (d.findViewById(R.id.conferma)).setOnClickListener(new View.OnClickListener() {
-                            @SuppressLint("NonConstantResourceId")
-                            @Override
-                            public void onClick(View v) {
-                                int scelta_id = ((RadioGroup) d.findViewById(R.id.radio)).getCheckedRadioButtonId();
-                                String prezzo = "";
-                                switch (scelta_id) {
-                                    case R.id.meta: scelta_id = 1; break;
-                                    case R.id.intero: scelta_id = 2; break;
-                                    case R.id.zero: scelta_id = 3; break;
-                                    case R.id.scelta:
-                                        prezzo = ((EditText) d.findViewById(R.id.editText)).getText().toString();
-                                        if (TextUtils.isEmpty(prezzo)) {scelta_id = 0;}
-                                        else {scelta_id = 4;}
-                                        break;
-                                    default: scelta_id = -1; break;
-                                }
-                                if (scelta_id > 0) {
-                                    d.cancel();
-                                    if (scelta_id < 4) {
-                                        new Svincola(scelta_id, giocatori.get(position), position).execute();
-                                    } else {
-                                        new Svincola(scelta_id, giocatori.get(position), position).execute(prezzo);
-                                    }
-                                } else {
-                                    if (scelta_id == 0) {
-                                        Toast.makeText(Gestione_Rose.this, "Inserire un valore", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(Gestione_Rose.this, "Selezionare un'opzione", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
+            list.setOnItemClickListener((adapterView, view, position, l) -> {
+                if (Objects.equals(giocatori.get(position).get("Nome"), "")) {
+                    new Lista().execute(giocatori.get(position).get("Ruolo"), String.valueOf(position));
+                } else {
+                    final Dialog d = new Dialog(Gestione_Rose.this, R.style.CustomDialog);
+                    d.setTitle(giocatori.get(position).get("Nome") + " (" + giocatori.get(position).get("Costo") + ")");
+                    d.setContentView(R.layout.svincola);
+                    (d.findViewById(R.id.conferma)).setOnClickListener(v -> {
+                        int scelta_id = ((RadioGroup) d.findViewById(R.id.radio)).getCheckedRadioButtonId();
+                        String prezzo = "";
+                        switch (scelta_id) {
+                            case R.id.meta: scelta_id = 1; break;
+                            case R.id.intero: scelta_id = 2; break;
+                            case R.id.zero: scelta_id = 3; break;
+                            case R.id.scelta:
+                                prezzo = ((EditText) d.findViewById(R.id.editText)).getText().toString();
+                                if (TextUtils.isEmpty(prezzo)) {scelta_id = 0;}
+                                else {scelta_id = 4;}
+                                break;
+                            default: scelta_id = -1; break;
+                        }
+                        if (scelta_id > 0) {
+                            d.cancel();
+                            if (scelta_id < 4) {
+                                new Svincola(scelta_id, giocatori.get(position), position).execute();
+                            } else {
+                                new Svincola(scelta_id, giocatori.get(position), position).execute(prezzo);
                             }
-                        });
+                        } else {
+                            if (scelta_id == 0) {
+                                Toast.makeText(Gestione_Rose.this, "Inserire un valore", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Gestione_Rose.this, "Selezionare un'opzione", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
-                        d.show();
-                    }
+                    d.show();
                 }
             });
         }
@@ -261,7 +251,7 @@ public class Gestione_Rose extends AppCompatActivity {
         int posizione;
 
         Svincola(int m, HashMap<String, String> g, int p) {
-            int price = Integer.parseInt(g.get("Costo"));
+            int price = Integer.parseInt(Objects.requireNonNull(g.get("Costo")));
             switch (m) {
                 case 1: prezzo = (price / 2 == 0 ? 1 : price / 2); break;
                 case 2: prezzo = price; break;
@@ -368,7 +358,7 @@ public class Gestione_Rose extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             giocatori.set(posizione, giocatore);
-            crediti_squadra = crediti_squadra - (int) Float.parseFloat(giocatore.get("Costo"));
+            crediti_squadra = crediti_squadra - (int) Float.parseFloat(Objects.requireNonNull(giocatore.get("Costo")));
             adapter.notifyDataSetChanged();
             invalidateOptionsMenu();
             Toast.makeText(Gestione_Rose.this, "Giocatore assegnato", Toast.LENGTH_SHORT).show();
@@ -635,12 +625,12 @@ public class Gestione_Rose extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_form, menu);
+        getMenuInflater().inflate(R.menu.menu_rose, menu);
         if (giocatori != null) {
-            menu.findItem(R.id.action_perc).setVisible(true);
-            menu.findItem(R.id.action_perc).setTitle("CREDITI: " + crediti_squadra);
+            menu.findItem(R.id.action_crediti).setVisible(true);
+            menu.findItem(R.id.action_crediti).setTitle("CREDITI: " + crediti_squadra);
         } else {
-            menu.findItem(R.id.action_perc).setVisible(false);
+            menu.findItem(R.id.action_crediti).setVisible(false);
         }
 
         return true;
@@ -655,7 +645,7 @@ public class Gestione_Rose extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_perc) {
+        if (id == R.id.action_crediti) {
             final Dialog d = new Dialog(Gestione_Rose.this, R.style.CustomDialog);
             d.setTitle("MODIFICA CREDITI");
             d.setContentView(R.layout.ingaggia);
@@ -664,19 +654,16 @@ public class Gestione_Rose extends AppCompatActivity {
             ((EditText) d.findViewById(R.id.prezzo)).setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
             ((Button) d.findViewById(R.id.conferma)).setText(R.string.conferma);
 
-            (d.findViewById(R.id.conferma)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String c = ((EditText) d.findViewById(R.id.prezzo)).getText().toString();
-                    if (!c.equals("") && !c.equals("0")) {
-                        d.cancel();
-                        new Crediti().execute(current, c);
-                    } else {
-                        if (c.equals(""))
-                            Toast.makeText(Gestione_Rose.this, "Inserire un valore", Toast.LENGTH_SHORT).show();
-                        if (c.equals("0"))
-                            Toast.makeText(Gestione_Rose.this, "Inserire un valore diverso da 0", Toast.LENGTH_SHORT).show();
-                    }
+            (d.findViewById(R.id.conferma)).setOnClickListener(v -> {
+                String c = ((EditText) d.findViewById(R.id.prezzo)).getText().toString();
+                if (!c.equals("") && !c.equals("0")) {
+                    d.cancel();
+                    new Crediti().execute(current, c);
+                } else {
+                    if (c.equals(""))
+                        Toast.makeText(Gestione_Rose.this, "Inserire un valore", Toast.LENGTH_SHORT).show();
+                    if (c.equals("0"))
+                        Toast.makeText(Gestione_Rose.this, "Inserire un valore diverso da 0", Toast.LENGTH_SHORT).show();
                 }
             });
             d.show();

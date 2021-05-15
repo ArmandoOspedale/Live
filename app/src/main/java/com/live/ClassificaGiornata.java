@@ -6,12 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,9 +25,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ClassificaGiornata extends AppCompatActivity {
 
@@ -52,12 +53,9 @@ public class ClassificaGiornata extends AppCompatActivity {
         srl = findViewById(R.id.srl);
         srl.setColorSchemeColors(Color.rgb(18, 116, 175));
 
-        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                srl.setRefreshing(true);
-                new DownloadClass().execute(comp);
-            }
+        srl.setOnRefreshListener(() -> {
+            srl.setRefreshing(true);
+            new DownloadClass().execute(comp);
         });
 
         Intent i = getIntent();
@@ -115,13 +113,9 @@ public class ClassificaGiornata extends AppCompatActivity {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            Collections.sort(feedList, new Comparator<HashMap<String, String>>() {
-                @Override
-                public int compare(HashMap<String, String> stringStringHashMap, HashMap<String, String> t1) {
-                    return Double.compare(Double.parseDouble(t1.get("Punti")),
-                            Double.parseDouble(stringStringHashMap.get("Punti")));
-                }
-            });
+            Collections.sort(feedList, (stringStringHashMap, t1) -> Double.compare(
+                    Double.parseDouble(Objects.requireNonNull(t1.get("Punti"))),
+                    Double.parseDouble(Objects.requireNonNull(stringStringHashMap.get("Punti")))));
             return feedList;
         }
 
@@ -250,7 +244,15 @@ public class ClassificaGiornata extends AppCompatActivity {
 
             if(doc.select("div[class=live-strip]").size() > 0) {
                 Elements liveStrip = doc.select("div[class=live-strip]");
-                Elements rows = liveStrip.get(0).children();
+                Elements rows;
+                if(liveStrip.size() > 1) {
+                    if(liveStrip.get(1).text().contains("TURNO SUCCESSIVO"))
+                        rows = liveStrip.get(0).children();
+                    else
+                        rows = liveStrip.get(1).children();
+                } else {
+                    rows = liveStrip.get(0).children();
+                }
                 rows.remove(0);
 
                 for (int i = 0; i < 10; i++) {
@@ -353,7 +355,7 @@ public class ClassificaGiornata extends AppCompatActivity {
         if (opzioni.mod_checked) {
             double media = por;
             if (dif.size() > 3) {
-                Collections.sort(dif, Collections.<Double>reverseOrder());
+                Collections.sort(dif, Collections.reverseOrder());
                 for (int i = 0; i < 3; i++) {
                     media = media + dif.get(i);
                 }

@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Serie_A extends AppCompatActivity {
 
@@ -76,8 +79,8 @@ public class Serie_A extends AppCompatActivity {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Posizione", String.valueOf(i + 1));
                     map.put("Squadra", rows.get(i).child(0).select("img").get(0).attr("title"));
-                    if (map.get("Squadra").equals("CHIEVOVERONA")) map.put("Squadra", "CHIEVO");
-                    if (map.get("Squadra").equals("HELLAS VERONA")) map.put("Squadra", "VERONA");
+                    if (Objects.equals(map.get("Squadra"), "CHIEVOVERONA")) map.put("Squadra", "CHIEVO");
+                    if (Objects.equals(map.get("Squadra"), "HELLAS VERONA")) map.put("Squadra", "VERONA");
                     map.put("Punti", rows.get(i).child(1).text());
                     map.put("Giocate", rows.get(i).child(2).text());
                     map.put("Vittorie", rows.get(i).child(3).text());
@@ -251,6 +254,7 @@ public class Serie_A extends AppCompatActivity {
             giornate[current] = c;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             GiornataFragment giornata = new GiornataFragment();
@@ -302,7 +306,7 @@ public class Serie_A extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (!controllo) {

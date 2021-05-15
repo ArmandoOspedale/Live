@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -216,52 +215,47 @@ class Calcolo extends Dialog {
                 ListView nonlist = new ListView(context);
                 ArrayAdapter<String> nonad = new ArrayAdapter<>(context, R.layout.row, R.id.row, noncalcolate);
                 nonlist.setAdapter(nonad);
-                nonlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        setContentView(R.layout.calcolo);
-                        final String temp = "GIORNATA " + noncalcolate[i];
-                        ((TextView) findViewById(R.id.header)).setText(temp);
-                        final ListView list = findViewById(R.id.squadre);
-                        bonus = new String[squadre.length];
-                        mAdapter ad = new mAdapter(context, squadre);
-                        list.setAdapter(ad);
+                nonlist.setOnItemClickListener((adapterView, view, i, l) -> {
+                    setContentView(R.layout.calcolo);
+                    final String temp = "GIORNATA " + noncalcolate[i];
+                    ((TextView) findViewById(R.id.header)).setText(temp);
+                    final ListView list = findViewById(R.id.squadre);
+                    bonus = new String[squadre.length];
+                    mAdapter ad = new mAdapter(context, squadre);
+                    list.setAdapter(ad);
 
-                        if (rinvio.get(noncalcolate[i]) != null) {
-                            int [] ids = context.getResources().getIntArray(R.array.FG);
-                            String [] serieA = context.getResources().getStringArray(R.array.squadre);
-                            String [] array_rinvio = new String[rinvio.get(noncalcolate[i]).size()];
-                            boolrinvio = new boolean[rinvio.get(noncalcolate[i]).size()];
-                            for (int k = 0; k < rinvio.get(noncalcolate[i]).size(); k++) {
-                                int f = 0;
-                                boolean found = false;
-                                while (!found) {
-                                    if(ids[f] == Integer.parseInt(rinvio.get(noncalcolate[i]).get(k))) {
-                                        array_rinvio[k] = serieA[f];
-                                        found = true;
-                                    }
-                                    f++;
+                    List<String> rinvioItem = rinvio.get(noncalcolate[i]);
+                    if (rinvioItem != null) {
+                        int [] ids = context.getResources().getIntArray(R.array.FG);
+                        String [] serieA = context.getResources().getStringArray(R.array.squadre);
+                        String [] array_rinvio = new String[rinvioItem.size()];
+                        boolrinvio = new boolean[rinvioItem.size()];
+                        for (int k = 0; k < rinvioItem.size(); k++) {
+                            int f = 0;
+                            boolean found = false;
+                            while (!found) {
+                                if(ids[f] == Integer.parseInt(rinvioItem.get(k))) {
+                                    array_rinvio[k] = serieA[f];
+                                    found = true;
                                 }
-                                boolrinvio[k] = false;
+                                f++;
                             }
-                            ListView list2 = findViewById(R.id.squadrerinvio);
-                            mAdapter2 ad2 = new mAdapter2(context, array_rinvio);
-                            list2.setAdapter(ad2);
-                            list2.setVisibility(View.VISIBLE);
-                            findViewById(R.id.rinvio).setVisibility(View.VISIBLE);
+                            boolrinvio[k] = false;
+                        }
+                        ListView list2 = findViewById(R.id.squadrerinvio);
+                        mAdapter2 ad2 = new mAdapter2(context, array_rinvio);
+                        list2.setAdapter(ad2);
+                        list2.setVisibility(View.VISIBLE);
+                        findViewById(R.id.rinvio).setVisibility(View.VISIBLE);
+                    }
+
+                    findViewById(R.id.conferma).setOnClickListener(view1 -> {
+                        for(int i1 = 0; i1 < valori.size() - 1; i1++) {
+                            bonus[i1] = valori.get(i1).getText().toString();
                         }
 
-                        findViewById(R.id.conferma).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                for(int i = 0; i < valori.size() - 1; i++) {
-                                    bonus[i] = valori.get(i).getText().toString();
-                                }
-
-                                new Post().execute(temp.split("GIORNATA ")[1]);
-                            }
-                        });
-                    }
+                        new Post().execute(temp.split("GIORNATA ")[1]);
+                    });
                 });
                 setContentView(nonlist);
                 show();
@@ -298,10 +292,11 @@ class Calcolo extends Dialog {
                 }
                 form.put("bonus", array_bonus);
                 JSONArray array_rinvio = new JSONArray();
-                if (boolrinvio != null) {
+                List<String> rinvioItem = rinvio.get(param[0]);
+                if (boolrinvio != null && rinvioItem != null) {
                     for (int i = 0; i < boolrinvio.length; i++) {
                         if (boolrinvio[i]) {
-                            array_rinvio.put(rinvio.get(param[0]).get(i));
+                            array_rinvio.put(rinvioItem.get(i));
                         }
                     }
                 }

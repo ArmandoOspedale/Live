@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,24 +45,21 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.new_login);
 
         final Button login = findViewById(R.id.btn_login);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                p = new ProgressDialog(LoginActivity.this);
-                p.setCancelable(false);
-                p.setMessage("Verifica login...");
-                p.show();
-                EditText un = findViewById(R.id.et_un);
-                InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm1 != null) imm1.hideSoftInputFromWindow(un.getWindowToken(), 0);
+        login.setOnClickListener(v -> {
+            p = new ProgressDialog(LoginActivity.this);
+            p.setCancelable(false);
+            p.setMessage("Verifica login...");
+            p.show();
+            EditText un = findViewById(R.id.et_un);
+            InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if(imm1 != null) imm1.hideSoftInputFromWindow(un.getWindowToken(), 0);
 
-                user = un.getText().toString();
-                EditText pw = findViewById(R.id.et_pw);
+            user = un.getText().toString();
+            EditText pw = findViewById(R.id.et_pw);
 
-                String pass = pw.getText().toString();
+            String pass = pw.getText().toString();
 
-                new Login().execute(user, pass);
-            }
+            new Login().execute(user, pass);
         });
     }
 
@@ -103,19 +99,21 @@ public class LoginActivity extends Activity {
 
                     Map<String, List<String>> map = connection.getHeaderFields();
                     List<String> fields = map.get("Set-Cookie");
-                    String c = fields.get(2);
+                    if(fields != null && fields.size() > 2) {
+                        String c = fields.get(2);
 
-                    JSONArray json_leghe = new JSONObject(response.getString("data")).getJSONArray("leghe");
-                    id_utente = new JSONObject(response.getString("data")).getJSONObject("utente").getString("id");
-                    leghe = new String[json_leghe.length()];
-                    squadre = new String[json_leghe.length()];
-                    for (int j = 0; j < leghe.length; j++) {
-                        leghe[j] = json_leghe.getJSONObject(j).getString("nome").replaceAll(" ", "-");
+                        JSONArray json_leghe = new JSONObject(response.getString("data")).getJSONArray("leghe");
+                        id_utente = new JSONObject(response.getString("data")).getJSONObject("utente").getString("id");
+                        leghe = new String[json_leghe.length()];
+                        squadre = new String[json_leghe.length()];
+                        for (int j = 0; j < leghe.length; j++) {
+                            leghe[j] = json_leghe.getJSONObject(j).getString("nome").replaceAll(" ", "-");
+                        }
+
+                        HttpRequest.cookie = c;
+                        HttpRequest.serialize(LoginActivity.this, leghe, "leghe");
+                        HttpRequest.serialize(LoginActivity.this, c, "cookie");
                     }
-
-                    HttpRequest.cookie = c;
-                    HttpRequest.serialize(LoginActivity.this, leghe, "leghe");
-                    HttpRequest.serialize(LoginActivity.this, c, "cookie");
                 } else if (!response.getString("error_msgs").equals("null")){
                     info = response.getJSONArray("error_msgs").getJSONObject(0).getString("descrizione");
                 }

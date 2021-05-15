@@ -14,11 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +21,6 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -37,6 +31,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -172,7 +172,7 @@ public class Schiera extends AppCompatActivity {
                         b.append(",L");
                 }
                 if(freeBench)
-                    orderbench = b.toString().substring(1);
+                    orderbench = b.substring(1);
                 if("0,0,0,0".equals(typebench))
                     typebench = calciatori.length() + "," + calciatori.length() + "," + calciatori.length() + "," + calciatori.length();
                 nocampioncino = Bitmap.createScaledBitmap(
@@ -188,35 +188,38 @@ public class Schiera extends AppCompatActivity {
                             REQUEST_WRITE_STORAGE);
                 } else {
                     File rootPath = new File(Environment.getExternalStorageDirectory(), DNAME);
-                    if (!rootPath.exists()) {
-                        rootPath.mkdir();
+                    boolean folderExistsOrCreated = rootPath.exists();
+                    if (!folderExistsOrCreated) {
+                        folderExistsOrCreated = rootPath.mkdir();
                     }
                     SharedPreferences sharedPreferences = getSharedPreferences("CAMPIONCINI", MODE_PRIVATE);
                     boolean campioncini = sharedPreferences.getBoolean(HttpRequest.lega, true);
-                    if (campioncini) {
-                        publishProgress(true);
-                        int height = getResources().getDisplayMetrics().heightPixels / 9;
-                        for (Player p : players) {
-                            try {
-                                URL url_camp = new URL("https://content.fantacalcio.it/web/campioncini/small/" + p.img + ".png");
+                    if(folderExistsOrCreated) {
+                        if (campioncini) {
+                            publishProgress(true);
+                            int size = getResources().getDisplayMetrics().heightPixels / 9;
+                            for (Player p : players) {
+                                try {
+                                    URL url_camp = new URL("https://content.fantacalcio.it/web/campioncini/small/" + p.img + ".png");
 
-                                Bitmap bitmapToScale = BitmapFactory.decodeStream(url_camp.openStream());
-                                if (bitmapToScale != null) {
-                                    p.campioncino = Bitmap.createScaledBitmap(bitmapToScale, height, height, true);
-                                    String imageFileName = p.img + ".png";
-                                    File image = new File(rootPath, imageFileName);
-                                    FileOutputStream out = new FileOutputStream(image);
-                                    p.campioncino.compress(Bitmap.CompressFormat.PNG, 100, out);
+                                    Bitmap bitmapToScale = BitmapFactory.decodeStream(url_camp.openStream());
+                                    if (bitmapToScale != null) {
+                                        p.campioncino = Bitmap.createScaledBitmap(bitmapToScale, size, size, true);
+                                        String imageFileName = p.img + ".png";
+                                        File image = new File(rootPath, imageFileName);
+                                        FileOutputStream out = new FileOutputStream(image);
+                                        p.campioncino.compress(Bitmap.CompressFormat.PNG, 100, out);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
-                        }
-                        sharedPreferences.edit().putBoolean(HttpRequest.lega, false).apply();
-                        publishProgress(false);
-                    } else {
-                        for (Player p : players) {
-                            p.campioncino = BitmapFactory.decodeFile(rootPath + "/" + p.img + ".png");
+                            sharedPreferences.edit().putBoolean(HttpRequest.lega, false).apply();
+                            publishProgress(false);
+                        } else {
+                            for (Player p : players) {
+                                p.campioncino = BitmapFactory.decodeFile(rootPath + "/" + p.img + ".png");
+                            }
                         }
                     }
                 }
@@ -381,84 +384,72 @@ public class Schiera extends AppCompatActivity {
             invalidateOptionsMenu();
         }
 
-        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int k, long id) {
-                if (modulo.equals("-")) {
-                    Toast.makeText(Schiera.this, "SELEZIONA UN MODULO", Toast.LENGTH_SHORT).show();
-                } else {
-                    boolean found = false;
-                    int i = 0;
-                    int position = 0;
-                    String nome = ((TextView) view.findViewById(R.id.Name)).getText().toString();
-                    while (!found) {
-                        if (nome.equals(players[i].nome)) {
-                            position = i;
-                            found = true;
-                        }
-                        i++;
+        l.setOnItemClickListener((parent, view, k, id) -> {
+            if (modulo.equals("-")) {
+                Toast.makeText(Schiera.this, "SELEZIONA UN MODULO", Toast.LENGTH_SHORT).show();
+            } else {
+                boolean found = false;
+                int i = 0;
+                int position12 = 0;
+                String nome = ((TextView) view.findViewById(R.id.Name)).getText().toString();
+                while (!found) {
+                    if (nome.equals(players[i].nome)) {
+                        position12 = i;
+                        found = true;
                     }
-                    players[position].schiera();
+                    i++;
                 }
+                players[position12].schiera();
             }
         });
 
-        l.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                boolean found = false;
-                int j = 0;
-                int position = 0;
-                String nome = ((TextView) view.findViewById(R.id.Name)).getText().toString();
-                while (!found) {
-                    if (nome.equals(players[j].nome)) {
-                        position = j;
-                        found = true;
-                    }
-                    j++;
+        l.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            boolean found = false;
+            int j = 0;
+            int position1 = 0;
+            String nome = ((TextView) view.findViewById(R.id.Name)).getText().toString();
+            while (!found) {
+                if (nome.equals(players[j].nome)) {
+                    position1 = j;
+                    found = true;
                 }
-                new Stats().execute(position);
-                return true;
+                j++;
             }
+            new Stats().execute(position1);
+            return true;
         });
 
         fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!modulo.equals("-") && p==0 && d==0 && c==0 && a==0
-                        && ((bench[0]==0 && bench[1]==0 && bench[2]==0 && bench[3]==0) || orderbench.contains("L"))) {
-                    String[] codici = new String[11];
-                    int n = 0;
-                    for (int p : genera(typebench)) { n = n + p; }
-                    String[] codp = new String[n];
-                    int j = 0;
-                    for (Player p : players) {
-                        if (p.incampo) { codici[j] = p.codice; j++; }
-                        if (p.inpanchina) { codp[p.order] = p.codice; }
-                    }
-                    codp = removeNullEntries(codp);
-                    final String [] dati = new String[]{"", ""};
-                    for (int i = 0; i < codici.length; i++) {
-                        dati[0] = dati[0] + codici[i] + (i == codici.length - 1 ? "" : ",");
-                    }
-                    for (int i = 0; i < codp.length; i++) {
-                        dati[1] = dati[1] + codp[i] + (i == codp.length - 1 ? "" : ",");
-                    }
-                    final Dialog d = new Dialog(Schiera.this);
-                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    d.setContentView(R.layout.dialog);
-                    d.findViewById(R.id.conferma).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            d.cancel();
-                            new Inserisci().execute(dati[0], dati[1], modulo, String.valueOf(((CheckBox) d.findViewById(R.id.invisibile)).isChecked()), (((CheckBox) d.findViewById(R.id.pertutte)).isChecked()) ? "1" : "0");
-                        }
-                    });
-                    d.show();
-                } else {
-                    Toast.makeText(Schiera.this, "Formazione incompleta", Toast.LENGTH_SHORT).show();
+        fab.setOnClickListener(v -> {
+            if (!modulo.equals("-") && p==0 && d==0 && c==0 && a==0
+                    && ((bench[0]==0 && bench[1]==0 && bench[2]==0 && bench[3]==0) || orderbench.contains("L"))) {
+                String[] codici = new String[11];
+                int n = 0;
+                for (int p : genera(typebench)) { n = n + p; }
+                String[] codp = new String[n];
+                int j = 0;
+                for (Player p : players) {
+                    if (p.incampo) { codici[j] = p.codice; j++; }
+                    if (p.inpanchina) { codp[p.order] = p.codice; }
                 }
+                codp = removeNullEntries(codp);
+                final String [] dati = new String[]{"", ""};
+                for (int i = 0; i < codici.length; i++) {
+                    dati[0] = dati[0] + codici[i] + (i == codici.length - 1 ? "" : ",");
+                }
+                for (int i = 0; i < codp.length; i++) {
+                    dati[1] = dati[1] + codp[i] + (i == codp.length - 1 ? "" : ",");
+                }
+                final Dialog d = new Dialog(Schiera.this);
+                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                d.setContentView(R.layout.dialog);
+                d.findViewById(R.id.conferma).setOnClickListener(view -> {
+                    d.cancel();
+                    new Inserisci().execute(dati[0], dati[1], modulo, String.valueOf(((CheckBox) d.findViewById(R.id.invisibile)).isChecked()), (((CheckBox) d.findViewById(R.id.pertutte)).isChecked()) ? "1" : "0");
+                });
+                d.show();
+            } else {
+                Toast.makeText(Schiera.this, "Formazione incompleta", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -611,7 +602,10 @@ public class Schiera extends AppCompatActivity {
 
                 BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 return new JSONObject(rd.readLine()).getString("success");
-            }catch (IOException | JSONException e) {return null;}
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
 
         @Override
@@ -770,12 +764,7 @@ public class Schiera extends AppCompatActivity {
                 ((ImageView) v.findViewById(R.id.campioncino)).setImageBitmap(nocampioncino);
             }
             ((TextView) v.findViewById(R.id.nome)).setText(nome);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    libera();
-                }
-            });
+            v.setOnClickListener(view -> libera());
             if (prob != null) {
                 ((TextView) v.findViewById(R.id.prob)).setText(prob);
                 if (prob.contains("I.T.") && Integer.parseInt(prob.split("I.T. ")[1].split("%")[0]) >= 50) {
@@ -797,12 +786,7 @@ public class Schiera extends AppCompatActivity {
                 ((ImageView) ((panchina.getChildAt(order)).findViewById(R.id.campioncino))).setImageBitmap(nocampioncino);
             }
             ((TextView) ((panchina.getChildAt(order)).findViewById(R.id.nome))).setText(nome);
-            panchina.getChildAt(order).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    libera();
-                }
-            });
+            panchina.getChildAt(order).setOnClickListener(view -> libera());
             if (prob != null) {
                 ((TextView) ((panchina.getChildAt(order)).findViewById(R.id.prob))).setText(prob);
                 if (prob.contains("I.T.") && Integer.parseInt(prob.split("I.T. ")[1].split("%")[0]) >= 50) {
@@ -970,16 +954,13 @@ public class Schiera extends AppCompatActivity {
     }
 
     private static final Comparator<Player> Ruolo
-            = new Comparator<Player>() {
+            = (g1, g2) -> {
 
-        public int compare(Player g1, Player g2) {
+                String ruolo1 = g1.ruolo;
+                String ruolo2 = g2.ruolo;
 
-            String ruolo1 = g1.ruolo;
-            String ruolo2 = g2.ruolo;
-
-            return ruolo2.compareTo(ruolo1);
-        }
-    };
+                return ruolo2.compareTo(ruolo1);
+            };
 
     private boolean partite = false;
     String [][] matches;
@@ -1015,9 +996,9 @@ public class Schiera extends AppCompatActivity {
                 for (int i = 0; i < players.length; i++) {
                     String nome = players[i].nome;
                     String[] temp = nome.split(" ");
-                    nome = temp[0].substring(0, 1) + temp[0].substring(1).toLowerCase();
+                    nome = temp[0].charAt(0) + temp[0].substring(1).toLowerCase();
                     if (temp.length > 1) {
-                        nome = nome + " " + temp[1].substring(0, 1) + temp[1].substring(1).toLowerCase();
+                        nome = nome + " " + temp[1].charAt(0) + temp[1].substring(1).toLowerCase();
                     }
                     if (temp.length > 2) {
                         nome = nome + " " + temp[2];
@@ -1110,6 +1091,7 @@ public class Schiera extends AppCompatActivity {
                 }
                 return prob;
             } catch (IOException e) {
+                e.printStackTrace();
                 return null;
             }
         }
@@ -1223,24 +1205,27 @@ public class Schiera extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             File rootPath = new File(Environment.getExternalStorageDirectory(), DNAME);
-            if (!rootPath.exists()) {
-                rootPath.mkdir();
+            boolean folderExistsOrCreated = rootPath.exists();
+            if (!folderExistsOrCreated) {
+                folderExistsOrCreated = rootPath.mkdir();
             }
-            int height = getResources().getDisplayMetrics().heightPixels / 9;
-            for (Player p : players) {
-                try {
-                    URL url_camp = new URL("https://content.fantacalcio.it/web/campioncini/small/" + p.img + ".png");
+            if(folderExistsOrCreated) {
+                int size = getResources().getDisplayMetrics().heightPixels / 9;
+                for (Player p : players) {
+                    try {
+                        URL url_camp = new URL("https://content.fantacalcio.it/web/campioncini/small/" + p.img + ".png");
 
-                    Bitmap bitmapToScale = BitmapFactory.decodeStream(url_camp.openStream());
-                    if (bitmapToScale != null) {
-                        p.campioncino = Bitmap.createScaledBitmap(bitmapToScale, height, height, true);
-                        String imageFileName = p.img + ".png";
-                        File image = new File(rootPath, imageFileName);
-                        FileOutputStream out = new FileOutputStream(image);
-                        p.campioncino.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        Bitmap bitmapToScale = BitmapFactory.decodeStream(url_camp.openStream());
+                        if (bitmapToScale != null) {
+                            p.campioncino = Bitmap.createScaledBitmap(bitmapToScale, size, size, true);
+                            String imageFileName = p.img + ".png";
+                            File image = new File(rootPath, imageFileName);
+                            FileOutputStream out = new FileOutputStream(image);
+                            p.campioncino.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
             return null;
@@ -1321,15 +1306,12 @@ public class Schiera extends AppCompatActivity {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.row, R.id.row, toAdapter);
                 list.setAdapter(adapter);
 
-                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent fg = new Intent(Schiera.this, PartitaLive.class);
-                        fg.putExtra("title", "fantacalcio");
-                        fg.putExtra("uri", "https://www.fantacalcio.it/probabili-formazioni-serie-a" + "#" + toAdapter[i].toLowerCase());
-                        startActivity(fg);
-                        d.dismiss();
-                    }
+                list.setOnItemClickListener((adapterView, view, i, l) -> {
+                    Intent fg = new Intent(Schiera.this, PartitaLive.class);
+                    fg.putExtra("title", "fantacalcio");
+                    fg.putExtra("uri", "https://www.fantacalcio.it/probabili-formazioni-serie-a" + "#" + toAdapter[i].toLowerCase());
+                    startActivity(fg);
+                    d.dismiss();
                 });
 
                 d.setContentView(list);

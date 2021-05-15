@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:fontFamily="@font/allerta"
-        android:gravity="left"
-        android:text="FantaLive"
+        android:gravity="start"
+        android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#FFFFFF"
         android:textSize="60sp"
@@ -33,7 +33,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/allerta"
-        android:text="Password"
+        android:text="@string/log_squadra"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -51,7 +51,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/allerta"
-        android:text="Username"
+        android:text="@string/log_lega"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -82,7 +82,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -107,7 +109,9 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:textColorHint="#167093" />
+            android:textColorHint="#167093"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -132,7 +136,7 @@
             android:layout_gravity="center"
             android:background="#00FFFFFF"
             android:fontFamily="@font/allerta"
-            android:text="LOGIN"
+            android:text="@string/log"
             android:textColor="#0E6D9A"
             android:textSize="24sp"
             android:textStyle="bold" />

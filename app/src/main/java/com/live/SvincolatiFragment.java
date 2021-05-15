@@ -9,16 +9,17 @@ import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -26,24 +27,23 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 public class SvincolatiFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ListView list = new ListView(getActivity());
         list.setSelector(new StateListDrawable());
         list.setBackgroundColor(Color.WHITE);
+        assert getArguments() != null;
         final String[][] giocatori = (String[][]) getArguments().get("giocatori");
         list.setAdapter(new mAdapter(getActivity(), giocatori));
 
         Assert.assertNotNull(giocatori);
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new Stats().execute(giocatori[i]);
-                return true;
-            }
+        list.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            new Stats().execute(giocatori[i]);
+            return true;
         });
         return list;
     }
@@ -167,7 +167,7 @@ public class SvincolatiFragment extends Fragment {
                     URL url = new URL("http://d22uzg7kr35tkk.cloudfront.net/web/campioncini/small/" + nome + ".png");
                     b = BitmapFactory.decodeStream(url.openStream());
                 } catch (IOException e) {
-                    b = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.no_campioncino);
+                    b = BitmapFactory.decodeResource(Objects.requireNonNull(getActivity()).getResources(), R.drawable.no_campioncino);
                 }
 
                 return stats;

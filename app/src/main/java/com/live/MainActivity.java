@@ -1,25 +1,10 @@
 package com.live;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -54,6 +39,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -77,6 +63,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import static android.view.View.GONE;
 
@@ -532,7 +533,7 @@ public class MainActivity extends AppCompatActivity {
         if (opzioni.mod_checked) {
             double media = por;
             if (dif.size() > 3) {
-                Collections.sort(dif, Collections.<Double>reverseOrder());
+                Collections.sort(dif, Collections.reverseOrder());
                 for (int i = 0; i < 3; i++) {
                     media = media + dif.get(i);
                 }
@@ -644,6 +645,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void visualizza () {
         progressDialog.dismiss();
         setContentView(R.layout.main_drawer);
@@ -680,109 +682,102 @@ public class MainActivity extends AppCompatActivity {
         azioni.add("OPZIONI LEGA");
         //azioni.add("NOTIFICHE");
         mDrawerList.setAdapter(new Menu_Adapter(this, azioni));
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                Intent intent;
-                switch ((String) parent.getItemAtPosition(position)) {
-                    case "FORMAZIONI":
-                        intent = new Intent(getApplicationContext(), Formazioni.class);
-                        intent.putExtra("squadre", comp.codici[1]);
-                        intent.putExtra("codici", comp.codici[0]);
-                        intent.putExtra("select", comp.defaultcode);
-                        intent.putExtra("comp", comp.codice);
-                        intent.putExtra("tipo", comp.tipo);
-                        startActivity(intent);
-                        break;
-                    case "CLASSIFICA":
-                        intent = new Intent(MainActivity.this, Classifica.class);
-                        intent.putExtra("comp", comp.codice);
-                        intent.putExtra("tipo", comp.tipo);
-                        intent.putExtra("squadre", comp.codici[1]);
-                        intent.putExtra("codici", comp.codici[0]);
-                        startActivity(intent);
-                        break;
-                    case "CALENDARIO":
-                        intent = new Intent(MainActivity.this, Calendario.class);
-                        intent.putExtra("comp", comp.codice);
-                        intent.putExtra("squadre", comp.codici[1]);
-                        intent.putExtra("codici", comp.codici[0]);
-                        startActivity(intent);
-                        break;
-                    case "ROSE":
-                        intent = new Intent(getApplicationContext(), Rose.class);
-                        intent.putExtra("squadre", comp.codici[1]);
-                        intent.putExtra("codici", comp.codici[0]);
-                        intent.putExtra("select", comp.defaultcode);
-                        intent.putExtra("admin", opzioni.admin);
-                        startActivity(intent);
-                        break;
-                    case "GESTIONE ROSE":
-                        intent = new Intent(getApplicationContext(), Gestione_Rose.class);
-                        intent.putExtra("squadre", comp.codici[1]);
-                        intent.putExtra("codici", comp.codici[0]);
-                        intent.putExtra("select", comp.defaultcode);
-                        intent.putExtra("admin", opzioni.admin);
-                        intent.putExtra("max", opzioni.calciatori_per_ruolo);
-                        startActivity(intent);
-                        break;
-                    case "GESTIONE FORMAZIONI":
-                        new Gestione_Formazioni(MainActivity.this, comp.codice, comp.codici[0], comp.codici[1]);
-                        break;
-                    case "SERIE A":
-                        intent = new Intent(getApplicationContext(), Serie_A.class);
-                        startActivity(intent);
-                        break;
-                    case "LISTA SVINCOLATI":
-                        intent = new Intent(getApplicationContext(), ListaSvincolati.class);
-                        startActivity(intent);
-                        break;
-                    case "VOTI":
-                        intent = new Intent(getApplicationContext(), Voti.class);
-                        startActivity(intent);
-                        break;
-                    case "STATISTICHE":
-                        Intent go = new Intent(getApplicationContext(), Statistiche.class);
-                        startActivity(go);
-                        break;
-                    case "OPZIONI LEGA":
-                        intent = new Intent(getApplicationContext(), Impostazioni.class);
-                        intent.putExtra("opzioni", opzioni);
-                        startActivity(intent);
-                        break;
-                    case "NOTIFICHE":
-                        final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
-                        d.setTitle("NOTIFICHE");
-                        d.setContentView(R.layout.notifiche);
+        mDrawerList.setOnItemClickListener((parent, view, position, id) -> {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            Intent intent;
+            switch ((String) parent.getItemAtPosition(position)) {
+                case "FORMAZIONI":
+                    intent = new Intent(getApplicationContext(), Formazioni.class);
+                    intent.putExtra("squadre", comp.codici[1]);
+                    intent.putExtra("codici", comp.codici[0]);
+                    intent.putExtra("select", comp.defaultcode);
+                    intent.putExtra("comp", comp.codice);
+                    intent.putExtra("tipo", comp.tipo);
+                    startActivity(intent);
+                    break;
+                case "CLASSIFICA":
+                    intent = new Intent(MainActivity.this, Classifica.class);
+                    intent.putExtra("comp", comp.codice);
+                    intent.putExtra("tipo", comp.tipo);
+                    intent.putExtra("squadre", comp.codici[1]);
+                    intent.putExtra("codici", comp.codici[0]);
+                    startActivity(intent);
+                    break;
+                case "CALENDARIO":
+                    intent = new Intent(MainActivity.this, Calendario.class);
+                    intent.putExtra("comp", comp.codice);
+                    intent.putExtra("squadre", comp.codici[1]);
+                    intent.putExtra("codici", comp.codici[0]);
+                    startActivity(intent);
+                    break;
+                case "ROSE":
+                    intent = new Intent(getApplicationContext(), Rose.class);
+                    intent.putExtra("squadre", comp.codici[1]);
+                    intent.putExtra("codici", comp.codici[0]);
+                    intent.putExtra("select", comp.defaultcode);
+                    intent.putExtra("admin", opzioni.admin);
+                    startActivity(intent);
+                    break;
+                case "GESTIONE ROSE":
+                    intent = new Intent(getApplicationContext(), Gestione_Rose.class);
+                    intent.putExtra("squadre", comp.codici[1]);
+                    intent.putExtra("codici", comp.codici[0]);
+                    intent.putExtra("select", comp.defaultcode);
+                    intent.putExtra("admin", opzioni.admin);
+                    intent.putExtra("max", opzioni.calciatori_per_ruolo);
+                    startActivity(intent);
+                    break;
+                case "GESTIONE FORMAZIONI":
+                    new Gestione_Formazioni(MainActivity.this, comp.codice, comp.codici[0], comp.codici[1]);
+                    break;
+                case "SERIE A":
+                    intent = new Intent(getApplicationContext(), Serie_A.class);
+                    startActivity(intent);
+                    break;
+                case "LISTA SVINCOLATI":
+                    intent = new Intent(getApplicationContext(), ListaSvincolati.class);
+                    startActivity(intent);
+                    break;
+                case "VOTI":
+                    intent = new Intent(getApplicationContext(), Voti.class);
+                    startActivity(intent);
+                    break;
+                case "STATISTICHE":
+                    Intent go = new Intent(getApplicationContext(), Statistiche.class);
+                    startActivity(go);
+                    break;
+                case "OPZIONI LEGA":
+                    intent = new Intent(getApplicationContext(), Impostazioni.class);
+                    intent.putExtra("opzioni", opzioni);
+                    startActivity(intent);
+                    break;
+                case "NOTIFICHE":
+                    final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
+                    d.setTitle("NOTIFICHE");
+                    d.setContentView(R.layout.notifiche);
 
-                        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        int attuale = sharedPreferences.getInt("notifiche", -1);
-                        RadioGroup radioGroup = d.findViewById(R.id.radio);
-                        radioGroup.check(attuale);
-                        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                            @Override
-                            @SuppressLint("NonConstantResourceId")
-                            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                                switch (i) {
-                                    case R.id.disattivate:
-                                        sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
-                                        break;
-                                    case R.id.tutte:
-                                        sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
-                                        break;
-                                    case R.id.miasquadra:
-                                        sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
-                                        break;
-                                    case R.id.miapartita:
-                                        sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
-                                        break;
-                                }
-                            }
-                        });
-                        d.show();
-                        break;
-                }
+                    final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    int attuale = sharedPreferences.getInt("notifiche", -1);
+                    RadioGroup radioGroup = d.findViewById(R.id.radio);
+                    radioGroup.check(attuale);
+                    radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+                        switch (i) {
+                            case R.id.disattivate:
+                                sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
+                                break;
+                            case R.id.tutte:
+                                sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
+                                break;
+                            case R.id.miasquadra:
+                                sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
+                                break;
+                            case R.id.miapartita:
+                                sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
+                                break;
+                        }
+                    });
+                    d.show();
+                    break;
             }
         });
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
@@ -804,91 +799,79 @@ public class MainActivity extends AppCompatActivity {
         TypedValue outValue = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         c1.setBackgroundResource(outValue.resourceId);
-        c1.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                final Dialog d = new Dialog(MainActivity.this);
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        c1.setOnLongClickListener(view -> {
+            final Dialog d = new Dialog(MainActivity.this);
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
+            String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
 
-                if (leghe.length == 1) {
-                    Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
-                } else {
-                    for (int i = 0; i < leghe.length; i++) {
-                        leghe[i] = leghe[i].toUpperCase();
-                    }
-
-                    LinearLayout l = new LinearLayout(MainActivity.this);
-                    l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                    final ListView list = new ListView(MainActivity.this);
-                    list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
-                            android.R.layout.select_dialog_item, leghe);
-                    list.setAdapter(adapter2);
-
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            d.dismiss();
-                            if (i != selected) selezionaLega(i, 0);
-                        }
-                    });
-
-                    l.addView(list);
-
-                    d.setContentView(l);
-                    d.show();
+            if (leghe.length == 1) {
+                Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
+            } else {
+                for (int i = 0; i < leghe.length; i++) {
+                    leghe[i] = leghe[i].toUpperCase();
                 }
 
-                return true;
+                LinearLayout l = new LinearLayout(MainActivity.this);
+                l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+                final ListView list = new ListView(MainActivity.this);
+                list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
+                        android.R.layout.select_dialog_item, leghe);
+                list.setAdapter(adapter2);
+
+                list.setOnItemClickListener((adapterView, view1, i, l1) -> {
+                    d.dismiss();
+                    if (i != selected) selezionaLega(i, 0);
+                });
+
+                l.addView(list);
+
+                d.setContentView(l);
+                d.show();
             }
+
+            return true;
         });
 
         TextView c2 = findViewById(R.id.competizione);
         c2.setText(comp.nome);
         c2.setBackgroundResource(outValue.resourceId);
 
-        c2.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                final Dialog d = new Dialog(MainActivity.this);
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        c2.setOnLongClickListener(view -> {
+            final Dialog d = new Dialog(MainActivity.this);
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                if (opzioni.competizioni.length == 1) {
-                    Toast.makeText(MainActivity.this, "Non ci sono altre competizioni attive", Toast.LENGTH_SHORT).show();
-                } else {
-                    LinearLayout l = new LinearLayout(MainActivity.this);
-                    l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            if (opzioni.competizioni.length == 1) {
+                Toast.makeText(MainActivity.this, "Non ci sono altre competizioni attive", Toast.LENGTH_SHORT).show();
+            } else {
+                LinearLayout l = new LinearLayout(MainActivity.this);
+                l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-                    String[] competizioni = new String[opzioni.competizioni.length];
-                    for (int i = 0; i < competizioni.length; i++) {
-                        competizioni[i] = opzioni.competizioni[i].nome;
-                    }
-
-                    final ListView list = new ListView(MainActivity.this);
-                    list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
-                            android.R.layout.select_dialog_item, competizioni);
-                    list.setAdapter(adapter2);
-
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            d.dismiss();
-                            if (!(opzioni.competizioni[i].equals(comp))) selezionaLega(selected, i);
-                        }
-                    });
-
-                    l.addView(list);
-
-                    d.setContentView(l);
-                    d.show();
+                String[] competizioni = new String[opzioni.competizioni.length];
+                for (int i = 0; i < competizioni.length; i++) {
+                    competizioni[i] = opzioni.competizioni[i].nome;
                 }
 
-                return true;
+                final ListView list = new ListView(MainActivity.this);
+                list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
+                        android.R.layout.select_dialog_item, competizioni);
+                list.setAdapter(adapter2);
+
+                list.setOnItemClickListener((adapterView, view12, i, l12) -> {
+                    d.dismiss();
+                    if (!(opzioni.competizioni[i].equals(comp))) selezionaLega(selected, i);
+                });
+
+                l.addView(list);
+
+                d.setContentView(l);
+                d.show();
             }
+
+            return true;
         });
 
         TextView c3 = findViewById(R.id.squadra);
@@ -923,26 +906,21 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, comp.codici[1]);
         list.setAdapter(adapter2);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i != 0) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(GONE);
-                    current = comp.codici[0][i];
-                    new DownloadTask().execute(current);
-                //}
-            }
+        list.setOnItemClickListener((adapterView, view, i, l) -> {
+            //if (i != 0) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(GONE);
+                current = comp.codici[0][i];
+                new DownloadTask().execute(current);
+            //}
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (list.getVisibility() == View.VISIBLE) {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(GONE);
-                } else {
-                    fab.animate().rotationBy(-90).setDuration(150);
-                    list.setVisibility(View.VISIBLE);
-                }
+        fab.setOnClickListener(v -> {
+            if (list.getVisibility() == View.VISIBLE) {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(GONE);
+            } else {
+                fab.animate().rotationBy(-90).setDuration(150);
+                list.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -959,6 +937,7 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
@@ -999,162 +978,145 @@ public class MainActivity extends AppCompatActivity {
             azioni.add("OPZIONI LEGA");
             //azioni.add("NOTIFICHE");
             mDrawerList.setAdapter(new Menu_Adapter(MainActivity.this, azioni));
-            mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    Intent intent;
-                    switch ((String) parent.getItemAtPosition(position)) {
-                        case "FORMAZIONI":
-                            intent = new Intent(getApplicationContext(), Formazioni.class);
-                            intent.putExtra("squadre", comp.codici[1]);
-                            intent.putExtra("codici", comp.codici[0]);
-                            intent.putExtra("select", comp.defaultcode);
-                            intent.putExtra("comp", comp.codice);
-                            intent.putExtra("tipo", comp.tipo);
-                            startActivity(intent);
-                            break;
-                        case "INSERISCI FORMAZIONE":
-                            intent = new Intent(MainActivity.this, Schiera.class);
-                            intent.putExtra("comp", comp.codice);
-                            intent.putExtra("teamId", comp.defaultcode);
-                            intent.putExtra("admin", 0);
-                            startActivity(intent);
-                            break;
-                        case "CLASSIFICA":
-                            intent = new Intent(MainActivity.this, Classifica.class);
-                            intent.putExtra("comp", comp.codice);
-                            intent.putExtra("tipo", comp.tipo);
-                            intent.putExtra("squadre", comp.codici[1]);
-                            intent.putExtra("codici", comp.codici[0]);
-                            startActivity(intent);
-                            break;
-                        case "CALENDARIO":
-                            intent = new Intent(MainActivity.this, Calendario.class);
-                            intent.putExtra("comp", comp.codice);
-                            intent.putExtra("squadre", comp.codici[1]);
-                            intent.putExtra("codici", comp.codici[0]);
-                            startActivity(intent);
-                            break;
-                        case "ROSE":
-                            intent = new Intent(getApplicationContext(), Rose.class);
-                            intent.putExtra("squadre", comp.codici[1]);
-                            intent.putExtra("codici", comp.codici[0]);
-                            intent.putExtra("select", comp.defaultcode);
-                            intent.putExtra("admin", opzioni.admin);
-                            startActivity(intent);
-                            break;
-                        case "LISTA SVINCOLATI":
-                            intent = new Intent(getApplicationContext(), ListaSvincolati.class);
-                            startActivity(intent);
-                            break;
-                        case "SERIE A":
-                            intent = new Intent(getApplicationContext(), Serie_A.class);
-                            startActivity(intent);
-                            break;
-                        case "GESTIONE ROSE":
-                            intent = new Intent(getApplicationContext(), Gestione_Rose.class);
-                            intent.putExtra("squadre", comp.codici[1]);
-                            intent.putExtra("codici", comp.codici[0]);
-                            intent.putExtra("select", comp.defaultcode);
-                            intent.putExtra("admin", opzioni.admin);
-                            intent.putExtra("max", opzioni.calciatori_per_ruolo);
-                            startActivity(intent);
-                            break;
-                        case "GESTIONE FORMAZIONI":
-                            new Gestione_Formazioni(MainActivity.this, comp.codice, comp.codici[0], comp.codici[1]);
-                            break;
-                        case "CALCOLA GIORNATA":
-                            Calcolo c = new Calcolo(MainActivity.this, comp.codici[1], comp.codici[0], comp.codice);
-                            c.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    new AsyncTask<Void, Void, Void>() {
-                                        @Override
-                                        @SuppressLint("WrongThread")
-                                        protected Void doInBackground(Void... voids) {
-                                            verificaLive();
-                                            return null;
-                                        }
+            mDrawerList.setOnItemClickListener((parent, view, position, id) -> {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent;
+                switch ((String) parent.getItemAtPosition(position)) {
+                    case "FORMAZIONI":
+                        intent = new Intent(getApplicationContext(), Formazioni.class);
+                        intent.putExtra("squadre", comp.codici[1]);
+                        intent.putExtra("codici", comp.codici[0]);
+                        intent.putExtra("select", comp.defaultcode);
+                        intent.putExtra("comp", comp.codice);
+                        intent.putExtra("tipo", comp.tipo);
+                        startActivity(intent);
+                        break;
+                    case "INSERISCI FORMAZIONE":
+                        intent = new Intent(MainActivity.this, Schiera.class);
+                        intent.putExtra("comp", comp.codice);
+                        intent.putExtra("teamId", comp.defaultcode);
+                        intent.putExtra("admin", 0);
+                        startActivity(intent);
+                        break;
+                    case "CLASSIFICA":
+                        intent = new Intent(MainActivity.this, Classifica.class);
+                        intent.putExtra("comp", comp.codice);
+                        intent.putExtra("tipo", comp.tipo);
+                        intent.putExtra("squadre", comp.codici[1]);
+                        intent.putExtra("codici", comp.codici[0]);
+                        startActivity(intent);
+                        break;
+                    case "CALENDARIO":
+                        intent = new Intent(MainActivity.this, Calendario.class);
+                        intent.putExtra("comp", comp.codice);
+                        intent.putExtra("squadre", comp.codici[1]);
+                        intent.putExtra("codici", comp.codici[0]);
+                        startActivity(intent);
+                        break;
+                    case "ROSE":
+                        intent = new Intent(getApplicationContext(), Rose.class);
+                        intent.putExtra("squadre", comp.codici[1]);
+                        intent.putExtra("codici", comp.codici[0]);
+                        intent.putExtra("select", comp.defaultcode);
+                        intent.putExtra("admin", opzioni.admin);
+                        startActivity(intent);
+                        break;
+                    case "LISTA SVINCOLATI":
+                        intent = new Intent(getApplicationContext(), ListaSvincolati.class);
+                        startActivity(intent);
+                        break;
+                    case "SERIE A":
+                        intent = new Intent(getApplicationContext(), Serie_A.class);
+                        startActivity(intent);
+                        break;
+                    case "GESTIONE ROSE":
+                        intent = new Intent(getApplicationContext(), Gestione_Rose.class);
+                        intent.putExtra("squadre", comp.codici[1]);
+                        intent.putExtra("codici", comp.codici[0]);
+                        intent.putExtra("select", comp.defaultcode);
+                        intent.putExtra("admin", opzioni.admin);
+                        intent.putExtra("max", opzioni.calciatori_per_ruolo);
+                        startActivity(intent);
+                        break;
+                    case "GESTIONE FORMAZIONI":
+                        new Gestione_Formazioni(MainActivity.this, comp.codice, comp.codici[0], comp.codici[1]);
+                        break;
+                    case "CALCOLA GIORNATA":
+                        Calcolo c = new Calcolo(MainActivity.this, comp.codici[1], comp.codici[0], comp.codice);
+                        c.setOnDismissListener(dialogInterface -> new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            @SuppressLint("WrongThread")
+                            protected Void doInBackground(Void... voids) {
+                                verificaLive();
+                                return null;
+                            }
 
-                                        @Override
-                                        protected void onPostExecute(Void result) {
-                                            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-                                            mPager.setAdapter(mPagerAdapter);
-                                            mPager.setCurrentItem((comp.tipo == 2 || comp.tipo == 3) ? 0 : 1);
-                                        }
-                                    }.execute();
-                                }
-                            });
-                            break;
-                        case "ANNULLA CALCOLO":
-                            Annulla a = new Annulla(MainActivity.this, comp.codice);
-                            a.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(final DialogInterface dialogInterface) {
-                                    new AsyncTask<Void, Void, Void>() {
-                                        @Override
-                                        @SuppressLint("WrongThread")
-                                        protected Void doInBackground(Void... voids) {
-                                            verificaLive();
-                                            return null;
-                                        }
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+                                mPager.setAdapter(mPagerAdapter);
+                                mPager.setCurrentItem((comp.tipo == 2 || comp.tipo == 3) ? 0 : 1);
+                            }
+                        }.execute());
+                        break;
+                    case "ANNULLA CALCOLO":
+                        Annulla a = new Annulla(MainActivity.this, comp.codice);
+                        a.setOnDismissListener(dialogInterface -> new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            @SuppressLint("WrongThread")
+                            protected Void doInBackground(Void... voids) {
+                                verificaLive();
+                                return null;
+                            }
 
-                                        @Override
-                                        protected void onPostExecute(Void result) {
-                                            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-                                            mPager.setAdapter(mPagerAdapter);
-                                            mPager.setCurrentItem((comp.tipo == 2 || comp.tipo == 3) ? 0 : 1);
-                                        }
-                                    }.execute();
-                                }
-                            });
-                            break;
-                        case "VOTI":
-                            intent = new Intent(getApplicationContext(), Voti.class);
-                            startActivity(intent);
-                            break;
-                        case "STATISTICHE":
-                            Intent go = new Intent(getApplicationContext(), Statistiche.class);
-                            startActivity(go);
-                            break;
-                        case "OPZIONI LEGA":
-                            intent = new Intent(getApplicationContext(), Impostazioni.class);
-                            intent.putExtra("opzioni", opzioni);
-                            startActivity(intent);
-                            break;
-                        case "NOTIFICHE":
-                            final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
-                            d.setTitle("NOTIFICHE");
-                            d.setContentView(R.layout.notifiche);
+                            @Override
+                            protected void onPostExecute(Void result) {
+                                mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+                                mPager.setAdapter(mPagerAdapter);
+                                mPager.setCurrentItem((comp.tipo == 2 || comp.tipo == 3) ? 0 : 1);
+                            }
+                        }.execute());
+                        break;
+                    case "VOTI":
+                        intent = new Intent(getApplicationContext(), Voti.class);
+                        startActivity(intent);
+                        break;
+                    case "STATISTICHE":
+                        Intent go = new Intent(getApplicationContext(), Statistiche.class);
+                        startActivity(go);
+                        break;
+                    case "OPZIONI LEGA":
+                        intent = new Intent(getApplicationContext(), Impostazioni.class);
+                        intent.putExtra("opzioni", opzioni);
+                        startActivity(intent);
+                        break;
+                    case "NOTIFICHE":
+                        final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
+                        d.setTitle("NOTIFICHE");
+                        d.setContentView(R.layout.notifiche);
 
-                            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            int attuale = sharedPreferences.getInt("notifiche", -1);
-                            RadioGroup radioGroup = d.findViewById(R.id.radio);
-                            radioGroup.check(attuale);
-                            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                @SuppressLint("NonConstantResourceId")
-                                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                                    switch (i) {
-                                        case R.id.disattivate:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
-                                            break;
-                                        case R.id.tutte:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
-                                            break;
-                                        case R.id.miasquadra:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
-                                            break;
-                                        case R.id.miapartita:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
-                                            break;
-                                    }
-                                }
-                            });
-                            d.show();
-                            break;
-                    }
+                        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        int attuale = sharedPreferences.getInt("notifiche", -1);
+                        RadioGroup radioGroup = d.findViewById(R.id.radio);
+                        radioGroup.check(attuale);
+                        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+                            switch (i) {
+                                case R.id.disattivate:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
+                                    break;
+                                case R.id.tutte:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
+                                    break;
+                                case R.id.miasquadra:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
+                                    break;
+                                case R.id.miapartita:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
+                                    break;
+                            }
+                        });
+                        d.show();
+                        break;
                 }
             });
             ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
@@ -1186,91 +1148,79 @@ public class MainActivity extends AppCompatActivity {
             TypedValue outValue = new TypedValue();
             getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
             c1.setBackgroundResource(outValue.resourceId);
-            c1.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    final Dialog d = new Dialog(MainActivity.this);
-                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            c1.setOnLongClickListener(view -> {
+                final Dialog d = new Dialog(MainActivity.this);
+                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                    String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
+                String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
 
-                    if (leghe.length == 1) {
-                        Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (int i = 0; i < leghe.length; i++) {
-                            leghe[i] = leghe[i].toUpperCase();
-                        }
-
-                        LinearLayout l = new LinearLayout(MainActivity.this);
-                        l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                        final ListView list = new ListView(MainActivity.this);
-                        list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
-                                android.R.layout.select_dialog_item, leghe);
-                        list.setAdapter(adapter2);
-
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                d.dismiss();
-                                if (i != selected) selezionaLega(i, 0);
-                            }
-                        });
-
-                        l.addView(list);
-
-                        d.setContentView(l);
-                        d.show();
+                if (leghe.length == 1) {
+                    Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < leghe.length; i++) {
+                        leghe[i] = leghe[i].toUpperCase();
                     }
 
-                    return true;
+                    LinearLayout l = new LinearLayout(MainActivity.this);
+                    l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+                    final ListView list = new ListView(MainActivity.this);
+                    list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
+                            android.R.layout.select_dialog_item, leghe);
+                    list.setAdapter(adapter2);
+
+                    list.setOnItemClickListener((adapterView, view1, i, l1) -> {
+                        d.dismiss();
+                        if (i != selected) selezionaLega(i, 0);
+                    });
+
+                    l.addView(list);
+
+                    d.setContentView(l);
+                    d.show();
                 }
+
+                return true;
             });
 
             TextView c2 = findViewById(R.id.competizione);
             c2.setText(comp.nome);
             c2.setBackgroundResource(outValue.resourceId);
 
-            c2.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    final Dialog d = new Dialog(MainActivity.this);
-                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            c2.setOnLongClickListener(view -> {
+                final Dialog d = new Dialog(MainActivity.this);
+                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                    if (opzioni.competizioni.length == 1) {
-                        Toast.makeText(MainActivity.this, "Non ci sono altre competizioni attive", Toast.LENGTH_SHORT).show();
-                    } else {
-                        LinearLayout l = new LinearLayout(MainActivity.this);
-                        l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                if (opzioni.competizioni.length == 1) {
+                    Toast.makeText(MainActivity.this, "Non ci sono altre competizioni attive", Toast.LENGTH_SHORT).show();
+                } else {
+                    LinearLayout l = new LinearLayout(MainActivity.this);
+                    l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-                        String[] competizioni = new String[opzioni.competizioni.length];
-                        for (int i = 0; i < competizioni.length; i++) {
-                            competizioni[i] = opzioni.competizioni[i].nome;
-                        }
-
-                        final ListView list = new ListView(MainActivity.this);
-                        list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
-                                android.R.layout.select_dialog_item, competizioni);
-                        list.setAdapter(adapter2);
-
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                d.dismiss();
-                                if (!(opzioni.competizioni[i].equals(comp))) selezionaLega(selected, i);
-                            }
-                        });
-
-                        l.addView(list);
-
-                        d.setContentView(l);
-                        d.show();
+                    String[] competizioni = new String[opzioni.competizioni.length];
+                    for (int i = 0; i < competizioni.length; i++) {
+                        competizioni[i] = opzioni.competizioni[i].nome;
                     }
 
-                    return true;
+                    final ListView list = new ListView(MainActivity.this);
+                    list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
+                            android.R.layout.select_dialog_item, competizioni);
+                    list.setAdapter(adapter2);
+
+                    list.setOnItemClickListener((adapterView, view12, i, l12) -> {
+                        d.dismiss();
+                        if (!(opzioni.competizioni[i].equals(comp))) selezionaLega(selected, i);
+                    });
+
+                    l.addView(list);
+
+                    d.setContentView(l);
+                    d.show();
                 }
+
+                return true;
             });
 
             TextView c3 = findViewById(R.id.squadra);
@@ -1294,20 +1244,17 @@ public class MainActivity extends AppCompatActivity {
                 rightList.setAdapter(new PallinoAdapter(MainActivity.this, matches, R.layout.serie_a, new String[]{"casa", "trasf", "orario", "data", "risultato"},
                         new int[]{R.id.casa, R.id.trasf, R.id.orario, R.id.data, R.id.result}));
 
-                rightList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (matches.get(i).get("stato").equals("blue")) {
-                            Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
-                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
-                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent fg = new Intent(MainActivity.this, PartitaLive.class);
-                            fg.putExtra("title", "Voti & Cronaca");
-                            fg.putExtra("giornata", serieA);
-                            fg.putExtra("match", matches.get(i).get("casa").toUpperCase() + " - " + matches.get(i).get("trasf").toUpperCase());
-                            startActivity(fg);
-                        }
+                rightList.setOnItemClickListener((adapterView, view, i, l) -> {
+                    if (Objects.equals(matches.get(i).get("stato"), "blue")) {
+                        Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                    } else if(Objects.equals(matches.get(i).get("data"), "-") || Objects.equals(matches.get(i).get("risultato"), "-")) {
+                        Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent fg = new Intent(MainActivity.this, PartitaLive.class);
+                        fg.putExtra("title", "Voti & Cronaca");
+                        fg.putExtra("giornata", serieA);
+                        fg.putExtra("match", Objects.requireNonNull(matches.get(i).get("casa")).toUpperCase() + " - " + Objects.requireNonNull(matches.get(i).get("trasf")).toUpperCase());
+                        startActivity(fg);
                     }
                 });
             } else {
@@ -1328,6 +1275,7 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
@@ -1348,88 +1296,81 @@ public class MainActivity extends AppCompatActivity {
             //azioni.add("NOTIFICHE");
 
             mDrawerList.setAdapter(new Menu_Adapter(MainActivity.this, azioni));
-            mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    Intent intent;
-                    String codice = "";
-                    int j = 0;
-                    boolean found = false;
-                    while (!found && j < opzioni.squadre[1].length) {
-                        if (opzioni.squadre[1][j].equals(squadra)) {
-                            found = true;
-                            codice = opzioni.squadre[0][j];
-                        }
-                        j++;
+            mDrawerList.setOnItemClickListener((parent, view, position, id) -> {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent;
+                String codice = "";
+                int j = 0;
+                boolean found = false;
+                while (!found && j < opzioni.squadre[1].length) {
+                    if (opzioni.squadre[1][j].equals(squadra)) {
+                        found = true;
+                        codice = opzioni.squadre[0][j];
                     }
-                    switch ((String) parent.getItemAtPosition(position)) {
-                        case "ROSE":
-                            intent = new Intent(getApplicationContext(), Rose.class);
-                            intent.putExtra("squadre", opzioni.squadre[1]);
-                            intent.putExtra("codici", opzioni.squadre[0]);
-                            intent.putExtra("select", codice);
-                            intent.putExtra("admin", opzioni.admin);
-                            startActivity(intent);
-                            break;
-                        case "GESTIONE ROSE":
-                            intent = new Intent(getApplicationContext(), Gestione_Rose.class);
-                            intent.putExtra("squadre", opzioni.squadre[1]);
-                            intent.putExtra("codici", opzioni.squadre[0]);
-                            intent.putExtra("select", codice);
-                            intent.putExtra("admin", opzioni.admin);
-                            intent.putExtra("max", opzioni.calciatori_per_ruolo);
-                            startActivity(intent);
-                            break;
-                        case "SERIE A":
-                            intent = new Intent(getApplicationContext(), Serie_A.class);
-                            startActivity(intent);
-                            break;
-                        case "LISTA SVINCOLATI":
-                            intent = new Intent(getApplicationContext(), ListaSvincolati.class);
-                            startActivity(intent);
-                            break;
-                        case "STATISTICHE":
-                            Intent go = new Intent(getApplicationContext(), Statistiche.class);
-                            startActivity(go);
-                            break;
-                        case "OPZIONI LEGA":
-                            intent = new Intent(getApplicationContext(), Impostazioni.class);
-                            intent.putExtra("opzioni", opzioni);
-                            startActivity(intent);
-                            break;
-                        case "NOTIFICHE":
-                            final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
-                            d.setTitle("NOTIFICHE");
-                            d.setContentView(R.layout.notifiche);
+                    j++;
+                }
+                switch ((String) parent.getItemAtPosition(position)) {
+                    case "ROSE":
+                        intent = new Intent(getApplicationContext(), Rose.class);
+                        intent.putExtra("squadre", opzioni.squadre[1]);
+                        intent.putExtra("codici", opzioni.squadre[0]);
+                        intent.putExtra("select", codice);
+                        intent.putExtra("admin", opzioni.admin);
+                        startActivity(intent);
+                        break;
+                    case "GESTIONE ROSE":
+                        intent = new Intent(getApplicationContext(), Gestione_Rose.class);
+                        intent.putExtra("squadre", opzioni.squadre[1]);
+                        intent.putExtra("codici", opzioni.squadre[0]);
+                        intent.putExtra("select", codice);
+                        intent.putExtra("admin", opzioni.admin);
+                        intent.putExtra("max", opzioni.calciatori_per_ruolo);
+                        startActivity(intent);
+                        break;
+                    case "SERIE A":
+                        intent = new Intent(getApplicationContext(), Serie_A.class);
+                        startActivity(intent);
+                        break;
+                    case "LISTA SVINCOLATI":
+                        intent = new Intent(getApplicationContext(), ListaSvincolati.class);
+                        startActivity(intent);
+                        break;
+                    case "STATISTICHE":
+                        Intent go = new Intent(getApplicationContext(), Statistiche.class);
+                        startActivity(go);
+                        break;
+                    case "OPZIONI LEGA":
+                        intent = new Intent(getApplicationContext(), Impostazioni.class);
+                        intent.putExtra("opzioni", opzioni);
+                        startActivity(intent);
+                        break;
+                    case "NOTIFICHE":
+                        final Dialog d = new Dialog(MainActivity.this, R.style.CustomDialog);
+                        d.setTitle("NOTIFICHE");
+                        d.setContentView(R.layout.notifiche);
 
-                            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            int attuale = sharedPreferences.getInt("notifiche", -1);
-                            RadioGroup radioGroup = d.findViewById(R.id.radio);
-                            radioGroup.check(attuale);
-                            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                @SuppressLint("NonConstantResourceId")
-                                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                                    switch (i) {
-                                        case R.id.disattivate:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
-                                            break;
-                                        case R.id.tutte:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
-                                            break;
-                                        case R.id.miasquadra:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
-                                            break;
-                                        case R.id.miapartita:
-                                            sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
-                                            break;
-                                    }
-                                }
-                            });
-                            d.show();
-                            break;
-                    }
+                        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        int attuale = sharedPreferences.getInt("notifiche", -1);
+                        RadioGroup radioGroup = d.findViewById(R.id.radio);
+                        radioGroup.check(attuale);
+                        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+                            switch (i) {
+                                case R.id.disattivate:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.disattivate).apply();
+                                    break;
+                                case R.id.tutte:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.tutte).apply();
+                                    break;
+                                case R.id.miasquadra:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.miasquadra).apply();
+                                    break;
+                                case R.id.miapartita:
+                                    sharedPreferences.edit().putInt("notifiche", R.id.miapartita).apply();
+                                    break;
+                            }
+                        });
+                        d.show();
+                        break;
                 }
             });
             ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
@@ -1451,46 +1392,40 @@ public class MainActivity extends AppCompatActivity {
             TypedValue outValue = new TypedValue();
             getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
             c1.setBackgroundResource(outValue.resourceId);
-            c1.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    final Dialog d = new Dialog(MainActivity.this);
-                    d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            c1.setOnLongClickListener(view -> {
+                final Dialog d = new Dialog(MainActivity.this);
+                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                    String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
+                String [] leghe = (String[]) HttpRequest.getObject(MainActivity.this, "leghe");
 
-                    if (leghe.length == 1) {
-                        Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (int i = 0; i < leghe.length; i++) {
-                            leghe[i] = leghe[i].toUpperCase();
-                        }
-
-                        LinearLayout l = new LinearLayout(MainActivity.this);
-                        l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                        final ListView list = new ListView(MainActivity.this);
-                        list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
-                                android.R.layout.select_dialog_item, leghe);
-                        list.setAdapter(adapter2);
-
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                d.dismiss();
-                                if (i != selected) selezionaLega(i, 0);
-                            }
-                        });
-
-                        l.addView(list);
-
-                        d.setContentView(l);
-                        d.show();
+                if (leghe.length == 1) {
+                    Toast.makeText(MainActivity.this, "Sei iscritto solo a questa lega", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < leghe.length; i++) {
+                        leghe[i] = leghe[i].toUpperCase();
                     }
 
-                    return true;
+                    LinearLayout l = new LinearLayout(MainActivity.this);
+                    l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+                    final ListView list = new ListView(MainActivity.this);
+                    list.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(MainActivity.this,
+                            android.R.layout.select_dialog_item, leghe);
+                    list.setAdapter(adapter2);
+
+                    list.setOnItemClickListener((adapterView, view1, i, l1) -> {
+                        d.dismiss();
+                        if (i != selected) selezionaLega(i, 0);
+                    });
+
+                    l.addView(list);
+
+                    d.setContentView(l);
+                    d.show();
                 }
+
+                return true;
             });
 
             TextView c2 = findViewById(R.id.competizione);
@@ -1532,20 +1467,17 @@ public class MainActivity extends AppCompatActivity {
                 rightList.setAdapter(new PallinoAdapter(MainActivity.this, matches, R.layout.serie_a, new String[]{"casa", "trasf", "orario", "data", "risultato"},
                         new int[]{R.id.casa, R.id.trasf, R.id.orario, R.id.data, R.id.result}));
 
-                rightList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (matches.get(i).get("stato").equals("blue")) {
-                            Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
-                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
-                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent fg = new Intent(MainActivity.this, PartitaLive.class);
-                            fg.putExtra("title", "Voti & Cronaca");
-                            fg.putExtra("giornata", serieA);
-                            fg.putExtra("match", matches.get(i).get("casa").toUpperCase() + " - " + matches.get(i).get("trasf").toUpperCase());
-                            startActivity(fg);
-                        }
+                rightList.setOnItemClickListener((adapterView, view, i, l) -> {
+                    if (Objects.equals(matches.get(i).get("stato"), "blue")) {
+                        Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                    } else if(Objects.equals(matches.get(i).get("data"), "-") || Objects.equals(matches.get(i).get("risultato"), "-")) {
+                        Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent fg = new Intent(MainActivity.this, PartitaLive.class);
+                        fg.putExtra("title", "Voti & Cronaca");
+                        fg.putExtra("giornata", serieA);
+                        fg.putExtra("match", Objects.requireNonNull(matches.get(i).get("casa")).toUpperCase() + " - " + Objects.requireNonNull(matches.get(i).get("trasf")).toUpperCase());
+                        startActivity(fg);
                     }
                 });
             } else {
@@ -1560,6 +1492,7 @@ public class MainActivity extends AppCompatActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             InfoFragment info = new InfoFragment();
@@ -1739,20 +1672,17 @@ public class MainActivity extends AppCompatActivity {
                 rightList.setAdapter(new PallinoAdapter(MainActivity.this, matches, R.layout.serie_a, new String[]{"casa", "trasf", "orario", "data", "risultato"},
                         new int[]{R.id.casa, R.id.trasf, R.id.orario, R.id.data, R.id.result}));
 
-                rightList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (matches.get(i).get("stato").equals("blue")) {
-                            Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
-                        } else if(matches.get(i).get("data").equals("-") || matches.get(i).get("risultato").equals("-")) {
-                            Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent fg = new Intent(MainActivity.this, PartitaLive.class);
-                            fg.putExtra("title", "Voti & Cronaca");
-                            fg.putExtra("giornata", serieA);
-                            fg.putExtra("match", matches.get(i).get("casa").toUpperCase() + " - " + matches.get(i).get("trasf").toUpperCase());
-                            startActivity(fg);
-                        }
+                rightList.setOnItemClickListener((adapterView, view, i, l) -> {
+                    if (Objects.equals(matches.get(i).get("stato"), "blue")) {
+                        Toast.makeText(MainActivity.this, "Partita non ancora iniziata", Toast.LENGTH_SHORT).show();
+                    } else if(Objects.equals(matches.get(i).get("data"), "-") || Objects.equals(matches.get(i).get("risultato"), "-")) {
+                        Toast.makeText(MainActivity.this, "Live non disponibile", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent fg = new Intent(MainActivity.this, PartitaLive.class);
+                        fg.putExtra("title", "Voti & Cronaca");
+                        fg.putExtra("giornata", serieA);
+                        fg.putExtra("match", Objects.requireNonNull(matches.get(i).get("casa")).toUpperCase() + " - " + Objects.requireNonNull(matches.get(i).get("trasf")).toUpperCase());
+                        startActivity(fg);
                     }
                 });
             } else {
@@ -1792,12 +1722,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    srl.setRefreshing(true);
-                    new DownloadTask().execute(current);
-                }
+            srl.setOnRefreshListener(() -> {
+                srl.setRefreshing(true);
+                new DownloadTask().execute(current);
             });
 
             risultato.put("punteggio", (c == 0 ? "    " : c) + (c == 0 || t == 0 ? "       " : "   -   ") + (t == 0 ? "    " : t));
@@ -1815,7 +1742,7 @@ public class MainActivity extends AppCompatActivity {
                 pb.setVisibility(GONE);
             } else if (result[0].length == 1 && result[1].length == 1) {
                 TextView info = (TextView) findViewById(R.id.nessuna);
-                info.setText("NESSUNA FORMAZIONE TROVATA PER LA COMPETIZIONE SELEZIONATA");
+                info.setText(R.string.noform);
                 info.setVisibility(View.VISIBLE);
                 p1.setVisibility(View.GONE);
                 listc.setVisibility(View.GONE);
@@ -1828,12 +1755,9 @@ public class MainActivity extends AppCompatActivity {
                     new SimpleAdapter (MainActivity.this, feedlist, R.layout.calenlist, new String []{"casa", "trasf", "punteggio", "result"}, new int [] {R.id.casa, R.id.trasf, R.id.punteggio, R.id.result});
             p1.setAdapter(adapter1);
 
-            p1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (opzioni.mod_checked) {
-                        Toast.makeText(MainActivity.this, "Modificatore " + result[0][0].getFanta() + ": " + mod_dif[0] + "\nModificatore " + result[1][0].getFanta() + ": " + mod_dif[1], Toast.LENGTH_SHORT).show();
-                    }
+            p1.setOnItemClickListener((parent, view, position, id) -> {
+                if (opzioni.mod_checked) {
+                    Toast.makeText(MainActivity.this, "Modificatore " + result[0][0].getFanta() + ": " + mod_dif[0] + "\nModificatore " + result[1][0].getFanta() + ": " + mod_dif[1], Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -1853,44 +1777,41 @@ public class MainActivity extends AppCompatActivity {
                 list.setAdapter(simpleAdapter);
                 registerForContextMenu(list);
 
-                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int position, long id) {
+                list.setOnItemClickListener((parent, v, position, id) -> {
 
-                        @SuppressLint("InflateParams")
-                        LinearLayout cr = (LinearLayout) getLayoutInflater().inflate(R.layout.custom_toast, null);
-                        Toast t = new Toast(MainActivity.this);
-                        TextView prec = cr.findViewById(R.id.squadra);
-                        String stato = giocatori[position].getStato();
-                        String text = giocatori[position].getSquad() + "   " + (stato.equals("") ? " -- " : giocatori[position].getVotoReale() + "   ");
-                        prec.setText(text);
-                        String [] bonus = giocatori[position].getBonus();
-                        if (bonus != null) {
-                            for (int i = 0; i < bonus.length; i++) {
-                                LinearLayout interno;
-                                if (i < 4) {
-                                    interno = cr.findViewById(R.id.riga1);
-                                } else {
-                                    interno = cr.findViewById(R.id.riga2);
-                                    interno.setVisibility(View.VISIBLE);
-                                }
-                                ImageView image = new ImageView(MainActivity.this);
-                                image.setPadding(3, 3, 3, 3);
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                                layoutParams.gravity = Gravity.CENTER_VERTICAL;
-                                image.setLayoutParams(layoutParams);
-                                image.setImageResource(getDrawable(MainActivity.this, bonus[i]));
-                                interno.addView(image, i % 4);
+                    @SuppressLint("InflateParams")
+                    LinearLayout cr = (LinearLayout) getLayoutInflater().inflate(R.layout.custom_toast, null);
+                    Toast t = new Toast(MainActivity.this);
+                    TextView prec = cr.findViewById(R.id.squadra);
+                    String stato = giocatori[position].getStato();
+                    String text = giocatori[position].getSquad() + "   " + (stato.equals("") ? " -- " : giocatori[position].getVotoReale() + "   ");
+                    prec.setText(text);
+                    String [] bonus = giocatori[position].getBonus();
+                    if (bonus != null) {
+                        for (int i = 0; i < bonus.length; i++) {
+                            LinearLayout interno;
+                            if (i < 4) {
+                                interno = cr.findViewById(R.id.riga1);
+                            } else {
+                                interno = cr.findViewById(R.id.riga2);
+                                interno.setVisibility(View.VISIBLE);
                             }
+                            ImageView image = new ImageView(MainActivity.this);
+                            image.setPadding(3, 3, 3, 3);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                            layoutParams.gravity = Gravity.CENTER_VERTICAL;
+                            image.setLayoutParams(layoutParams);
+                            image.setImageResource(getDrawable(MainActivity.this, bonus[i]));
+                            interno.addView(image, i % 4);
                         }
-                        TextView succ = cr.findViewById(R.id.stato);
-                        String temp = "   " + stato;
-                        succ.setText(temp);
-
-                        t.setView(cr);
-                        t.show();
                     }
+                    TextView succ = cr.findViewById(R.id.stato);
+                    String temp = "   " + stato;
+                    succ.setText(temp);
+
+                    t.setView(cr);
+                    t.show();
                 });
             }
             return punteggio;
@@ -1989,12 +1910,7 @@ public class MainActivity extends AppCompatActivity {
             new AlertDialog.Builder(MainActivity.this)
                     .setMessage("Connesione internet assente")
                     .setCancelable(false)
-                    .setPositiveButton("RIPROVA ", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            selezionaLega(l, c);
-                        }
-                    }).create().show();
+                    .setPositiveButton("RIPROVA ", (dialog, which) -> selezionaLega(l, c)).create().show();
         }
     }
 
@@ -2293,7 +2209,7 @@ public class MainActivity extends AppCompatActivity {
             String casa = "";
             String trasf = "";
             while (!found) {
-                if(matches.get(i).get("casa").contains(squadra) || matches.get(i).get("trasf").contains(squadra)) {
+                if(Objects.requireNonNull(Objects.requireNonNull(matches.get(i).get("casa"))).contains(squadra) || Objects.requireNonNull(matches.get(i).get("trasf")).contains(squadra)) {
                     casa = matches.get(i).get("casa");
                     trasf = matches.get(i).get("trasf");
                     found = true; i--;
@@ -2302,8 +2218,8 @@ public class MainActivity extends AppCompatActivity {
             }
             match = casa + " - " + trasf;
             menu.setHeaderTitle(match);
-            if (!matches.get(i).get("stato").equals("blue")
-                    && !matches.get(i).get("data").equals("-") && !matches.get(i).get("risultato").equals("-")) {
+            if (!Objects.equals(matches.get(i).get("stato"), "blue")
+                    && !Objects.equals(matches.get(i).get("data"), "-") && !Objects.equals(matches.get(i).get("risultato"), "-")) {
                 menu.add("Voti & Cronaca");
             }
             menu.add("Pagina fantacalcio");

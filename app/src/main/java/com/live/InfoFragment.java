@@ -2,6 +2,8 @@ package com.live;
 
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,8 @@ import java.util.List;
 public class InfoFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        assert getArguments() != null;
         int position = getArguments().getInt("position");
         int comp = getArguments().getInt("comp");
         ViewGroup rootView = null;
@@ -58,6 +60,7 @@ public class InfoFragment extends Fragment {
     }
 
     private ViewGroup ultima (LayoutInflater inflater, ViewGroup container) {
+        assert getArguments() != null;
         String [] ultima = getArguments().getStringArray("ultima");
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.lista, container, false);
         ListView p1 = rootView.findViewById(R.id.lista);
@@ -95,6 +98,7 @@ public class InfoFragment extends Fragment {
 
     @SuppressWarnings("unchecked")
     private ViewGroup classifica (LayoutInflater inflater, ViewGroup container) {
+        assert getArguments() != null;
         List<HashMap<String, String>> result = (List<HashMap<String, String>>) getArguments().getSerializable("classifica");
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.classifica, container, false);
         if (result != null) {
@@ -108,6 +112,7 @@ public class InfoFragment extends Fragment {
     }
 
     private ViewGroup prossima (LayoutInflater inflater, ViewGroup container) {
+        assert getArguments() != null;
         String [] prossima = getArguments().getStringArray("prossima");
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.lista, container, false);
         ListView p2 = rootView.findViewById(R.id.lista);

@@ -8,9 +8,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +25,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -41,11 +42,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Formazioni extends AppCompatActivity {
 
@@ -98,26 +98,21 @@ public class Formazioni extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, squadre);
         list.setAdapter(adapter2);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i != 0) {
-                    fab.animate().rotationBy(-90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                    position = i;
-                    new DownloadForm().execute(codici[position], invisualizzazione);
-                //}
-            }
+        list.setOnItemClickListener((adapterView, view, i1, l) -> {
+            //if (i != 0) {
+                fab.animate().rotationBy(-90).setDuration(150);
+                list.setVisibility(View.GONE);
+                position = i1;
+                new DownloadForm().execute(codici[position], invisualizzazione);
+            //}
         });
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (list.getVisibility() == View.VISIBLE) {
-                    fab.animate().rotationBy(-90).setDuration(150);
-                    list.setVisibility(View.GONE);
-                } else {
-                    fab.animate().rotationBy(90).setDuration(150);
-                    list.setVisibility(View.VISIBLE);
-                }
+        fab.setOnClickListener(v -> {
+            if (list.getVisibility() == View.VISIBLE) {
+                fab.animate().rotationBy(-90).setDuration(150);
+                list.setVisibility(View.GONE);
+            } else {
+                fab.animate().rotationBy(90).setDuration(150);
+                list.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -181,22 +176,21 @@ public class Formazioni extends AppCompatActivity {
                             JSONArray jsonSquadre = formazione.getJSONArray("sq");
                             for (int s = 0; s < jsonSquadre.length(); s++) {
                                 HashMap<String, String> item = new HashMap<>();
-                                item.put("squadra", HttpRequest.getNomeSquadra(jsonSquadre.getJSONObject(s).getString("id"), codici, squadre));                                ;
+                                item.put("squadra", HttpRequest.getNomeSquadra(jsonSquadre.getJSONObject(s).getString("id"), codici, squadre));
                                 item.put("punti", jsonSquadre.getJSONObject(s).getString("t"));
                                 punteggi.add(item);
                             }
                         }
-                        Collections.sort(punteggi, new Comparator<HashMap<String, String>>() {
-                            @Override
-                            public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
-                                if (o1.get("squadra").equals("Classifica di giornata")) {
-                                    return 1;
-                                }
-                                if (o2.get("squadra").equals("Classifica di giornata")) {
-                                    return 0;
-                                }
-                                return Double.compare(Double.parseDouble(o2.get("punti")), Double.parseDouble(o1.get("punti")));
+                        Collections.sort(punteggi, (o1, o2) -> {
+                            if (Objects.equals(o1.get("squadra"), "Classifica di giornata")) {
+                                return 1;
                             }
+                            if (Objects.equals(o2.get("squadra"), "Classifica di giornata")) {
+                                return 0;
+                            }
+                            return Double.compare(
+                                    Double.parseDouble(Objects.requireNonNull(o2.get("punti"))),
+                                    Double.parseDouble(Objects.requireNonNull(o1.get("punti"))));
                         });
                     }
                     if (tipo == 2 || tipo == 3) {
@@ -695,9 +689,9 @@ public class Formazioni extends AppCompatActivity {
                     for (Giocatore g : casa) {
                         String nome = g.getNome();
                         String[] temp = nome.split(" ");
-                        nome = temp[0].substring(0, 1) + temp[0].substring(1).toLowerCase();
+                        nome = temp[0].charAt(0) + temp[0].substring(1).toLowerCase();
                         if (temp.length > 1) {
-                            nome = nome + " " + temp[1].substring(0, 1) + temp[1].substring(1).toLowerCase();
+                            nome = nome + " " + temp[1].charAt(0) + temp[1].substring(1).toLowerCase();
                         }
                         if (temp.length > 2) {
                             nome = nome + " " + temp[2];
@@ -783,9 +777,9 @@ public class Formazioni extends AppCompatActivity {
                     for (Giocatore g : trasf) {
                         String nome = g.getNome();
                         String[] temp = nome.split(" ");
-                        nome = temp[0].substring(0, 1) + temp[0].substring(1).toLowerCase();
+                        nome = temp[0].charAt(0) + temp[0].substring(1).toLowerCase();
                         if (temp.length > 1) {
-                            nome = nome + " " + temp[1].substring(0, 1) + temp[1].substring(1).toLowerCase();
+                            nome = nome + " " + temp[1].charAt(0) + temp[1].substring(1).toLowerCase();
                         }
                         if (temp.length > 2) {
                             nome = nome + " " + temp[2];
